@@ -43,5 +43,15 @@ jobs:
         with:
           path: ./dist
 
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
       - name: Publish website
+        id: deployment
         uses: actions/deploy-pages@v4
