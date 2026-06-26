@@ -1,21 +1,15 @@
 import { useCallback, useState } from 'react'
 import {
   ArrowRight,
-  BarChart3,
   Building2,
   Check,
   ChevronDown,
   ClipboardCheck,
-  FileChartColumn,
   Gauge,
   LineChart,
   LockKeyhole,
   Menu,
-  MessageCircle,
-  Network,
-  Route,
   ShieldCheck,
-  Target,
   Users,
   X,
 } from 'lucide-react'
@@ -43,15 +37,65 @@ const navItems = [
   { href: '#contact', label: 'Контакты' },
 ]
 
-const flowNodes = [
-  { label: 'Реклама', icon: BarChart3 },
-  { label: 'Лид', icon: MessageCircle },
-  { label: 'Продажи', icon: Users },
-  { label: 'Договор', icon: ClipboardCheck },
-  { label: 'Обучение', icon: Route },
-  { label: 'Филиал', icon: Building2 },
-  { label: 'Отчётность', icon: FileChartColumn },
-  { label: 'Решение', icon: Target },
+const scenarioStatusByPath = {
+  growth: 'Есть действующая автошкола',
+  launch: 'Планирую запуск',
+  system: 'Ищу готовую систему',
+} as const
+
+const directionCards = [
+  {
+    id: 'growth',
+    label: 'Развитие',
+    title: 'Действующая автошкола',
+    text: 'Собираем экономику, маркетинг, продажи и филиалы в управляемую модель.',
+    art: 'chart',
+  },
+  {
+    id: 'launch',
+    label: 'Запуск',
+    title: 'Автошкола с нуля',
+    text: 'Проектируем маршрут запуска до первых затрат и случайных решений.',
+    art: 'route',
+  },
+  {
+    id: 'system',
+    label: 'Система',
+    title: 'Готовый контур управления',
+    text: 'Внедряем стандарты и инструменты так, чтобы контроль оставался у владельца.',
+    art: 'speed',
+  },
+] as const
+
+const lossFunnelRows = [
+  {
+    stage: 'Заявки',
+    reason: 'Разные данные',
+    detail: 'Маркетинг и продажи считают результат по-разному.',
+    potentialWidth: 100,
+    lossWidth: 18,
+  },
+  {
+    stage: 'Продажи',
+    reason: 'Нет общей картины',
+    detail: 'Переходы между этапами видны не полностью.',
+    potentialWidth: 82,
+    lossWidth: 22,
+  },
+  {
+    stage: 'Договоры',
+    reason: 'План без факта',
+    detail: 'План не связан с реальными действиями команды.',
+    potentialWidth: 60,
+    lossWidth: 16,
+  },
+  {
+    stage: 'Решения',
+    reason: 'Решения на ощущениях',
+    detail: 'Собственник собирает выводы вручную.',
+    potentialWidth: 44,
+    lossWidth: 14,
+  },
 ]
 
 const systemModules = [
@@ -155,6 +199,16 @@ function TransformationVisual({ area }: { area: TransformationArea }) {
   )
 }
 
+function DirectionArt({ type }: { type: (typeof directionCards)[number]['art'] }) {
+  return (
+    <div className={`direction-art direction-art--${type}`} aria-hidden="true">
+      {type === 'chart' ? <><i /><i /><i /><b /></> : null}
+      {type === 'route' ? <><i /><i /><i /></> : null}
+      {type === 'speed' ? <><i /><b /></> : null}
+    </div>
+  )
+}
+
 function MessengerButton({ kind, contacts }: { kind: 'telegram' | 'whatsapp'; contacts: Contacts }) {
   const href = contacts[kind]
   const label = kind === 'telegram' ? 'Telegram' : 'WhatsApp'
@@ -171,11 +225,16 @@ function MessengerButton({ kind, contacts }: { kind: 'telegram' | 'whatsapp'; co
 function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [quizOpen, setQuizOpen] = useState(false)
+  const [initialQuizStatus, setInitialQuizStatus] = useState('')
   const [activeArea, setActiveArea] = useState(transformationAreas[0].id)
   const [openFaq, setOpenFaq] = useState(0)
 
-  const closeQuiz = useCallback(() => setQuizOpen(false), [])
-  const openQuiz = useCallback((source: string) => {
+  const closeQuiz = useCallback(() => {
+    setQuizOpen(false)
+    setInitialQuizStatus('')
+  }, [])
+  const openQuiz = useCallback((source: string, status = '') => {
+    setInitialQuizStatus(status)
     setQuizOpen(true)
     trackEvent('quiz_open', { source })
   }, [])
@@ -212,12 +271,12 @@ function App() {
           <div className="hero-glow hero-glow--blue" aria-hidden="true" />
           <div className="hero-glow hero-glow--red" aria-hidden="true" />
           <div className="hero-copy">
-            <p className="brand-kicker">Система управления автошколой</p>
-            <h1 id="hero-title">Система управления автошколой, которая работает <span>без ручного контроля</span></h1>
-            <p className="hero-lead">Связываем маркетинг, продажи, процессы и экономику в единую систему. Показываем, где теряются деньги, время и управляемость — и помогаем это исправить.</p>
+            <p className="brand-kicker">АСО Автошкола</p>
+            <h1 id="hero-title">Запуск и развитие автошкол <span>под ключ</span></h1>
+            <p className="hero-promise">Система управления автошколой, которая работает без ручного контроля.</p>
+            <p className="hero-lead">Проектируем управленческий контур: маркетинг, продажи, процессы и экономику. Сначала проводим диагностику ситуации, затем показываем, какие решения нужны именно вашей автошколе.</p>
             <div className="hero-actions">
-              <button className="button button--primary button--large" type="button" onClick={() => scrollToContact('hero')}>Получить предварительный разбор <ArrowRight aria-hidden="true" /></button>
-              <button className="text-button" type="button" onClick={() => openQuiz('hero')}>Пройти диагностику <ArrowRight aria-hidden="true" /></button>
+              <button className="button button--primary button--large hero-diagnostic-button" type="button" onClick={() => openQuiz('hero')}>Пройти диагностику <ArrowRight aria-hidden="true" /></button>
             </div>
             <ul className="hero-points" aria-label="Что даёт предварительный разбор">
               <li><Check aria-hidden="true" /> Определим текущую задачу</li>
@@ -243,7 +302,7 @@ function App() {
 
         <section className="audience-section section-padding" aria-labelledby="audience-title">
           <div className="content-shell">
-            <div className="section-heading section-heading--split">
+            <div className="section-heading section-heading--stack">
               <h2 id="audience-title">Три ситуации.<br />Одна задача — <span>управляемый бизнес</span></h2>
               <p>Мы начинаем не с готового пакета, а с того, где находится автошкола сейчас и какую систему нужно построить.</p>
             </div>
@@ -256,7 +315,7 @@ function App() {
                     <p>{path.description}</p>
                   </div>
                   <strong>{path.result}</strong>
-                  <button type="button" className="round-link" onClick={() => openQuiz(`audience-${path.id}`)} aria-label={`Пройти диагностику: ${path.title}`}><ArrowRight aria-hidden="true" /></button>
+                  <button type="button" className="round-link" onClick={() => openQuiz(`audience-${path.id}`, scenarioStatusByPath[path.id])} aria-label={`Пройти диагностику: ${path.title}`}><ArrowRight aria-hidden="true" /></button>
                 </article>
               ))}
             </div>
@@ -270,41 +329,44 @@ function App() {
               <h2 id="directions-title">Не консультация. <span>Контур изменений под задачу бизнеса</span></h2>
             </div>
             <div className="direction-composition">
-              <article className="direction direction--growth">
-                <div className="direction__icon"><LineChart aria-hidden="true" /></div>
-                <div><span>01</span><h3>Развитие действующей автошколы</h3><p>Экономика, маркетинг, продажи, команда и филиалы собираются в одну управляемую модель.</p></div>
-              </article>
-              <article className="direction direction--launch">
-                <div className="direction__icon"><Target aria-hidden="true" /></div>
-                <div><span>02</span><h3>Запуск с нуля</h3><p>До старта проектируются экономика, процессы, роли и маршрут выхода на рынок.</p></div>
-              </article>
-              <article className="direction direction--system">
-                <div className="direction__icon"><Network aria-hidden="true" /></div>
-                <div><span>03</span><h3>Подключение к системе</h3><p>Стандарты и технологии внедряются так, чтобы собственник сохранял контроль.</p></div>
-                <div className="brand-application-crop" role="img" aria-label="Фрагмент фирменного оформления АСО из приложенного креатива" />
-              </article>
+              {directionCards.map((card) => (
+                <article className={`direction direction--${card.id}`} key={card.id}>
+                  <div className="direction__copy">
+                    <span>{card.label}</span>
+                    <h3>{card.title}</h3>
+                    <p>{card.text}</p>
+                  </div>
+                  <DirectionArt type={card.art} />
+                </article>
+              ))}
             </div>
           </div>
         </section>
 
         <section className="loss-map-section section-padding" aria-labelledby="loss-map-title">
           <div className="content-shell">
-            <div className="section-heading section-heading--split">
+            <div className="section-heading loss-heading">
               <h2 id="loss-map-title">Где теряются деньги и управляемость</h2>
               <p>Проблема часто находится не в одном отделе, а в разрывах между этапами. Поэтому мы смотрим на весь путь — от рекламы до решения собственника.</p>
             </div>
-            <div className="loss-map">
-              {flowNodes.map((node, index) => {
-                const Icon = node.icon
-                return (
-                  <div className="loss-map__part" key={node.label}>
-                    <div className="loss-node"><Icon aria-hidden="true" /><span>{node.label}</span></div>
-                    {index < flowNodes.length - 1 ? <div className={`loss-link${[1, 3, 5].includes(index) ? ' is-broken' : ''}`} aria-hidden="true"><i /></div> : null}
-                  </div>
-                )
-              })}
-              <div className="loss-note glass-panel loss-note--one"><strong>Нет общей картины</strong><span>Данные заканчиваются внутри отдела</span></div>
-              <div className="loss-note glass-panel loss-note--two"><strong>План без факта</strong><span>Решения принимаются на ощущениях</span></div>
+            <div className="loss-funnel" aria-label="Воронка потенциальной прибыли и потерь">
+              <div className="loss-funnel__grid">
+                {lossFunnelRows.map((row) => (
+                  <article className="loss-funnel__row" key={row.reason}>
+                    <div className="loss-funnel__labels"><span>{row.stage}</span><strong>{row.reason}</strong></div>
+                    <div className="loss-funnel__bar" aria-hidden="true">
+                      <span className="loss-funnel__potential" style={{ width: `${row.potentialWidth}%` }} />
+                      <span className="loss-funnel__lost" style={{ width: `${row.lossWidth}%`, left: `calc(${row.potentialWidth}% - ${row.lossWidth}%)` }} />
+                      <i style={{ left: `calc(${row.potentialWidth}% - 10px)` }} />
+                    </div>
+                    <p>{row.detail}</p>
+                  </article>
+                ))}
+              </div>
+              <div className="loss-funnel__summary">
+                <strong>−N% потенциальной прибыли</strong>
+                <span>точный процент определяется после диагностики</span>
+              </div>
             </div>
           </div>
         </section>
@@ -470,7 +532,7 @@ function App() {
         </div>
       </footer>
 
-      <QuizDialog open={quizOpen} onClose={closeQuiz} />
+      {quizOpen ? <QuizDialog open={quizOpen} onClose={closeQuiz} initialStatus={initialQuizStatus} /> : null}
     </>
   )
 }

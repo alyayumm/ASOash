@@ -8,8 +8,6 @@ import '@fontsource/manrope/cyrillic-600.css'
 import '@fontsource/manrope/cyrillic-700.css'
 import App from './App'
 import './styles.css'
-import './latestOverrides.css'
-import './latestPatch'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

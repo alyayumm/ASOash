@@ -6,6 +6,7 @@ import type { QuizAnswers } from '../types'
 type QuizDialogProps = {
   open: boolean
   onClose: () => void
+  initialStatus?: string
 }
 
 const initialAnswers: QuizAnswers = {
@@ -43,12 +44,16 @@ function formatPhone(value: string) {
   return result
 }
 
-export function QuizDialog({ open, onClose }: QuizDialogProps) {
+function answersWithStatus(status = ''): QuizAnswers {
+  return { ...initialAnswers, status }
+}
+
+export function QuizDialog({ open, onClose, initialStatus = '' }: QuizDialogProps) {
   const titleId = useId()
   const dialogRef = useRef<HTMLDivElement>(null)
   const restoreFocusRef = useRef<HTMLElement | null>(null)
-  const [step, setStep] = useState(0)
-  const [answers, setAnswers] = useState(initialAnswers)
+  const [step, setStep] = useState(() => (initialStatus ? 1 : 0))
+  const [answers, setAnswers] = useState(() => answersWithStatus(initialStatus))
   const [error, setError] = useState('')
   const [complete, setComplete] = useState(false)
 
@@ -121,12 +126,6 @@ export function QuizDialog({ open, onClose }: QuizDialogProps) {
 
   const close = () => {
     onClose()
-    window.setTimeout(() => {
-      setStep(0)
-      setAnswers(initialAnswers)
-      setComplete(false)
-      setError('')
-    }, 250)
   }
 
   return (
