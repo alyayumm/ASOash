@@ -1360,9 +1360,9 @@ p {
 .founder-team img {
   display: block;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 3 / 2;
   object-fit: cover;
-  object-position: 50% 48%;
+  object-position: 50% 50%;
 }
 
 .objections-section {

@@ -12,6 +12,7 @@ import {
   X,
 } from 'lucide-react'
 import { trackEvent } from './analytics'
+import teamPhotoAsset from './assets/aso-team-updated.png'
 import ctaSlidersIcon from './assets/cta-sliders-icon.png'
 import { BrandLogo } from './components/BrandLogo'
 import { LeadForm } from './components/LeadForm'
@@ -66,8 +67,6 @@ const directionCards = [
     image: publicAsset('direction-system-visual.jpg'),
   },
 ] as const
-
-const teamPhotoAsset = publicAsset('aso-team-group.jpg')
 
 const lossFunnelRows = [
   {
