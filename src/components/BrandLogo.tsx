@@ -1,3 +1,5 @@
+import logoAsset from '../assets/aso-logo-transparent-cropped.png'
+
 type BrandLogoProps = {
   inverse?: boolean
 }
@@ -5,7 +7,7 @@ type BrandLogoProps = {
 export function BrandLogo({ inverse = false }: BrandLogoProps) {
   return (
     <span className={`brand-logo${inverse ? ' brand-logo--inverse' : ''}`} aria-label="АСО Автошкол">
-      <span className="brand-logo__source" aria-hidden="true" />
+      <img className="brand-logo__image" src={logoAsset} alt="" aria-hidden="true" />
     </span>
   )
 }

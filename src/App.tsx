@@ -12,6 +12,7 @@ import {
   X,
 } from 'lucide-react'
 import { trackEvent } from './analytics'
+import ctaSlidersIcon from './assets/cta-sliders-icon.png'
 import { BrandLogo } from './components/BrandLogo'
 import { LeadForm } from './components/LeadForm'
 import { QuizDialog } from './components/QuizDialog'
@@ -76,6 +77,7 @@ const lossFunnelRows = [
     potentialWidth: 78,
     lossWidth: 16,
     reasonOffset: 80,
+    reasonLeft: 446,
   },
   {
     stage: 'Продажи',
@@ -84,6 +86,7 @@ const lossFunnelRows = [
     potentialWidth: 66,
     lossWidth: 18,
     reasonOffset: 68,
+    reasonLeft: 382,
   },
   {
     stage: 'Договоры',
@@ -92,6 +95,7 @@ const lossFunnelRows = [
     potentialWidth: 55,
     lossWidth: 14,
     reasonOffset: 57,
+    reasonLeft: 325,
   },
   {
     stage: 'Решения',
@@ -100,6 +104,7 @@ const lossFunnelRows = [
     potentialWidth: 46,
     lossWidth: 12,
     reasonOffset: 48,
+    reasonLeft: 278,
   },
 ]
 
@@ -253,7 +258,6 @@ function App() {
           <div className="hero-glow hero-glow--blue" aria-hidden="true" />
           <div className="hero-glow hero-glow--red" aria-hidden="true" />
           <div className="hero-copy">
-            <p className="brand-kicker">АСО Автошкол</p>
             <h1 id="hero-title">Запуск и развитие автошкол <span>под ключ</span></h1>
             <p className="hero-promise">Система управления автошколой, которая работает без ручного контроля.</p>
             <p className="hero-lead">Проектируем управленческий контур: маркетинг, продажи, процессы и экономику. Сначала проводим диагностику ситуации, затем показываем, какие решения нужны именно вашей автошколе.</p>
@@ -343,7 +347,7 @@ function App() {
                 {lossFunnelRows.map((row) => (
                   <article className="loss-funnel__row" key={row.reason}>
                     <div className="loss-funnel__labels"><span>{row.stage}</span></div>
-                    <div className="loss-funnel__bar-cell" style={{ '--reason-left': `${row.reasonOffset}%` } as CSSProperties}>
+                    <div className="loss-funnel__bar-cell" style={{ '--reason-left': `${row.reasonLeft}px`, '--reason-mobile-left': `${row.reasonOffset}%` } as CSSProperties}>
                       <div className="loss-funnel__bar" aria-hidden="true">
                         <span className="loss-funnel__potential" style={{ width: `calc(${row.potentialWidth}% - 18px)` }} />
                         <span className="loss-funnel__lost" style={{ width: `calc(${row.lossWidth}% - 18px)`, left: `calc(${row.potentialWidth}% - ${row.lossWidth}%)` }} />
@@ -376,7 +380,7 @@ function App() {
               {systemAreas.map((area) => <SystemAreaRow key={area.id} area={area} />)}
             </div>
             <div className="system-summary">
-              <p>Не меняем отдельный отдел в отрыве от остальных. Связываем ключевые процессы в одну систему, которой может управлять собственник.</p>
+              <p>В результате у собственника появляется единая картина: маркетинг, продажи, процессы, команда и экономика связаны между собой, а решения принимаются по понятным данным.</p>
               <button className="button button--primary" type="button" onClick={() => openQuiz('system-section')}>Получить разбор системы управления <ArrowRight aria-hidden="true" /></button>
             </div>
           </div>
@@ -473,7 +477,7 @@ function App() {
           <div className="content-shell">
             <div className="quiz-cta-card">
               <div className="quiz-cta-copy"><p className="brand-kicker brand-kicker--light">Диагностика за несколько шагов</p><h2 id="quiz-cta-title">Начните с вашей ситуации, а не с готового тарифа</h2><p>Ответьте на вопросы о регионе, текущем этапе и главной задаче. Это поможет сделать первый разговор предметным.</p><button className="button button--light button--large" type="button" onClick={() => openQuiz('diagnostic-cta')}>Пройти диагностику <ArrowRight aria-hidden="true" /></button></div>
-              <img className="quiz-cta-visual" src={publicAsset('cta-target-icon.jpg')} alt="" loading="lazy" />
+              <img className="quiz-cta-visual" src={ctaSlidersIcon} alt="" loading="lazy" />
             </div>
           </div>
         </section>
@@ -483,7 +487,7 @@ function App() {
           <div className="content-shell contact-layout">
             <div className="faq-column">
               <p className="brand-kicker">Перед заявкой</p>
-              <h2 id="contact-title">Коротко о формате работы</h2>
+              <h2 id="contact-title">FAQ</h2>
               <div className="faq-list">
                 {faqItems.map((item, index) => (
                   <div className={openFaq === index ? 'faq-item is-open' : 'faq-item'} key={item.question}>
