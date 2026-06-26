@@ -6,13 +6,16 @@ export type AudiencePath = {
   result: string
 }
 
-export type TransformationArea = {
+export type SystemArea = {
   id: string
   number: string
   title: string
-  description: string
-  outcome: string
-  artifacts: string[]
+  currentState: string
+  implementation: string
+  result: string
+  tools: string[]
+  shortBefore: string
+  shortAfter: string
 }
 
 export type ProcessStep = {
@@ -21,6 +24,7 @@ export type ProcessStep = {
   action: string
   result: string
   artifact: string
+  image: string
 }
 
 export type EvidenceItem = {

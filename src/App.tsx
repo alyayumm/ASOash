@@ -1,11 +1,9 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useState, type CSSProperties } from 'react'
 import {
   ArrowRight,
   Building2,
   Check,
   ChevronDown,
-  ClipboardCheck,
-  Gauge,
   LineChart,
   LockKeyhole,
   Menu,
@@ -24,9 +22,9 @@ import {
   faqItems,
   problems,
   processSteps,
-  transformationAreas,
+  systemAreas,
 } from './data'
-import type { Contacts, TransformationArea } from './types'
+import type { Contacts, SystemArea } from './types'
 
 const navItems = [
   { href: '#directions', label: 'Направления' },
@@ -42,54 +40,58 @@ const scenarioStatusByPath = {
   system: 'Ищу готовую систему',
 } as const
 
+const publicAsset = (fileName: string) => `${import.meta.env.BASE_URL}assets/${fileName}`
+
 const directionCards = [
   {
     id: 'growth',
     label: 'Развитие',
     title: 'Действующая автошкола',
     text: 'Собираем экономику, маркетинг, продажи и филиалы в управляемую модель.',
-    art: 'chart',
+    image: publicAsset('direction-growth-visual.jpg'),
   },
   {
     id: 'launch',
     label: 'Запуск',
     title: 'Автошкола с нуля',
     text: 'Проектируем маршрут запуска до первых затрат и случайных решений.',
-    art: 'route',
+    image: publicAsset('direction-launch-visual.jpg'),
   },
   {
     id: 'system',
     label: 'Система',
     title: 'Готовый контур управления',
     text: 'Внедряем стандарты и инструменты так, чтобы контроль оставался у владельца.',
-    art: 'speed',
+    image: publicAsset('direction-system-visual.jpg'),
   },
 ] as const
 
-const iconSystemAsset = `${import.meta.env.BASE_URL}assets/creative-icon-system.png`
-const teamPhotoAsset = `${import.meta.env.BASE_URL}assets/aso-team-group.jpg`
+const teamPhotoAsset = publicAsset('aso-team-group.jpg')
 
 const lossFunnelRows = [
   {
     stage: 'Заявки',
     reason: 'Разные данные',
     detail: 'Маркетинг и продажи считают результат по-разному',
-    potentialWidth: 84,
+    potentialWidth: 78,
     lossWidth: 16,
+    reasonOffset: 80,
   },
   {
     stage: 'Продажи',
     reason: 'Нет общей картины',
     detail: 'Переходы между этапами видны не полностью',
-    potentialWidth: 70,
+    potentialWidth: 66,
     lossWidth: 18,
+    reasonOffset: 68,
   },
   {
     stage: 'Договоры',
     reason: 'План без факта',
     detail: 'План не связан с реальными действиями команды',
-    potentialWidth: 56,
+    potentialWidth: 55,
     lossWidth: 14,
+    reasonOffset: 57,
   },
   {
     stage: 'Решения',
@@ -97,17 +99,8 @@ const lossFunnelRows = [
     detail: 'Собственник собирает выводы вручную',
     potentialWidth: 46,
     lossWidth: 12,
+    reasonOffset: 48,
   },
-]
-
-const systemModules = [
-  { title: 'Диагностика', text: 'Проверяем данные, роли и процессы.' },
-  { title: 'Стратегия', text: 'Фиксируем приоритеты и управленческий контур.' },
-  { title: 'Маркетинг', text: 'Связываем каналы с обращениями и договорами.' },
-  { title: 'Продажи', text: 'Настраиваем этапы и контроль обработки.' },
-  { title: 'Процессы', text: 'Определяем правила и зоны ответственности.' },
-  { title: 'Аналитика', text: 'Собираем общую картину для решений.' },
-  { title: 'Сопровождение', text: 'Помогаем команде закрепить новый ритм.' },
 ]
 
 const deliverables = [
@@ -145,6 +138,7 @@ function ManagementPreview() {
     <div className="management-preview" aria-label="Пример управленческой системы без реальных данных">
       <div className="preview-orbit preview-orbit--one" aria-hidden="true" />
       <div className="preview-orbit preview-orbit--two" aria-hidden="true" />
+      <div className="preview-system-title" aria-hidden="true">Контур собственника</div>
       <article className="glass-panel preview-panel preview-panel--plan">
         <div className="preview-panel__heading"><span>План / факт</span><LineChart aria-hidden="true" /></div>
         <div className="bar-chart" aria-hidden="true">
@@ -170,37 +164,32 @@ function ManagementPreview() {
   )
 }
 
-function TransformationVisual({ area }: { area: TransformationArea }) {
+function SystemAreaRow({ area }: { area: SystemArea }) {
   return (
-    <div className={`transformation-visual transformation-visual--${area.id}`}>
-      <div className="transformation-visual__topline">
-        <span>{area.number}</span>
-        <p>{area.outcome}</p>
+    <article className="system-area">
+      <div className="system-area__header">
+        <span className="system-area__number">{area.number}</span>
+        <div>
+          <h3>{area.title}</h3>
+          <p className="system-area__formula"><span>{area.shortBefore}</span><i aria-hidden="true" /><strong>{area.shortAfter}</strong></p>
+        </div>
       </div>
-      <div className="transformation-diagram" aria-hidden="true">
-        <div className="diagram-core"><Gauge /><span>Единая картина</span></div>
-        {area.artifacts.map((artifact, index) => (
-          <div className={`diagram-node diagram-node--${index + 1}`} key={artifact}>
-            <span>{artifact}</span>
-          </div>
-        ))}
-        <svg viewBox="0 0 600 330" preserveAspectRatio="none">
-          <path d="M300 165 C220 95, 180 70, 95 80" />
-          <path d="M300 165 C390 90, 430 55, 520 80" />
-          <path d="M300 165 C360 230, 430 255, 500 270" />
-        </svg>
+      <div className="system-area__flow">
+        <div className="system-area__stage system-area__stage--current"><span>Сейчас</span><p>{area.currentState}</p></div>
+        <div className="system-area__stage system-area__stage--implementation"><span>Что внедряем</span><p>{area.implementation}</p></div>
+        <div className="system-area__stage system-area__stage--result"><span>Результат</span><p>{area.result}</p></div>
       </div>
-    </div>
+      <div className="system-area__tools" aria-label={`Инструменты: ${area.title}`}>
+        {area.tools.map((tool) => <span className="system-area__tool" key={tool}>{tool}</span>)}
+      </div>
+    </article>
   )
 }
 
-function DirectionArt({ type }: { type: (typeof directionCards)[number]['art'] }) {
+function DirectionArt({ card }: { card: (typeof directionCards)[number] }) {
   return (
-    <div className={`direction-art direction-art--${type}`} aria-hidden="true">
-      <span className={`direction-ref-icon direction-ref-icon--${type}`} style={{ backgroundImage: `url(${iconSystemAsset})` }} />
-      {type === 'chart' ? <><i /><i /><i /><b /></> : null}
-      {type === 'route' ? <><i /><i /><i /><b /></> : null}
-      {type === 'speed' ? <><i /><b /><em /></> : null}
+    <div className={`direction-art direction-art--${card.id}`} aria-hidden="true">
+      <img src={card.image} alt="" loading="lazy" />
     </div>
   )
 }
@@ -222,7 +211,6 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [quizOpen, setQuizOpen] = useState(false)
   const [initialQuizStatus, setInitialQuizStatus] = useState('')
-  const [activeArea, setActiveArea] = useState(transformationAreas[0].id)
   const [openFaq, setOpenFaq] = useState(0)
 
   const closeQuiz = useCallback(() => {
@@ -239,8 +227,6 @@ function App() {
     trackEvent('cta_click', { source })
     document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
-
-  const selectedArea = transformationAreas.find((area) => area.id === activeArea) ?? transformationAreas[0]
 
   return (
     <>
@@ -292,6 +278,7 @@ function App() {
                   <span>0{index + 1}</span><p>{problem}</p>
                 </div>
               ))}
+              <button className="text-button section-cta" type="button" onClick={() => openQuiz('statement')}>Разобрать текущую ситуацию <ArrowRight aria-hidden="true" /></button>
             </div>
           </div>
         </section>
@@ -315,6 +302,9 @@ function App() {
                 </article>
               ))}
             </div>
+            <div className="section-action">
+              <button className="button button--primary" type="button" onClick={() => openQuiz('audience')}>Выбрать свой сценарий <ArrowRight aria-hidden="true" /></button>
+            </div>
           </div>
         </section>
 
@@ -332,9 +322,12 @@ function App() {
                     <h3>{card.title}</h3>
                     <p>{card.text}</p>
                   </div>
-                  <DirectionArt type={card.art} />
+                  <DirectionArt card={card} />
                 </article>
               ))}
+            </div>
+            <div className="section-action">
+              <button className="button button--primary" type="button" onClick={() => openQuiz('directions')}>Подобрать направление работы <ArrowRight aria-hidden="true" /></button>
             </div>
           </div>
         </section>
@@ -349,11 +342,14 @@ function App() {
               <div className="loss-funnel__grid">
                 {lossFunnelRows.map((row) => (
                   <article className="loss-funnel__row" key={row.reason}>
-                    <div className="loss-funnel__labels"><span>{row.stage}</span><strong>{row.reason}</strong></div>
-                    <div className="loss-funnel__bar" aria-hidden="true">
-                      <span className="loss-funnel__potential" style={{ width: `${row.potentialWidth}%` }} />
-                      <span className="loss-funnel__lost" style={{ width: `${row.lossWidth}%`, left: `calc(${row.potentialWidth}% - ${row.lossWidth}%)` }} />
-                      <i style={{ left: `calc(${row.potentialWidth}% - 10px)` }} />
+                    <div className="loss-funnel__labels"><span>{row.stage}</span></div>
+                    <div className="loss-funnel__bar-cell" style={{ '--reason-left': `${row.reasonOffset}%` } as CSSProperties}>
+                      <div className="loss-funnel__bar" aria-hidden="true">
+                        <span className="loss-funnel__potential" style={{ width: `calc(${row.potentialWidth}% - 18px)` }} />
+                        <span className="loss-funnel__lost" style={{ width: `calc(${row.lossWidth}% - 18px)`, left: `calc(${row.potentialWidth}% - ${row.lossWidth}%)` }} />
+                        <i style={{ left: `calc(${row.potentialWidth}% - 2px)` }} />
+                      </div>
+                      <strong className="loss-funnel__reason">{row.reason}</strong>
                     </div>
                     <p>{row.detail}</p>
                   </article>
@@ -364,32 +360,24 @@ function App() {
                 <span>точный процент определяется после диагностики</span>
               </div>
             </div>
+            <div className="section-action">
+              <button className="button button--primary" type="button" onClick={() => openQuiz('loss-funnel')}>Найти свои потери <ArrowRight aria-hidden="true" /></button>
+            </div>
           </div>
         </section>
 
         <section id="system" className="system-section section-padding" aria-labelledby="system-title">
           <div className="content-shell">
-            <div className="section-heading section-heading--split">
-              <h2 id="system-title">Что именно <span>мы перестраиваем</span></h2>
-              <p>Каждое направление связано с остальными. Переключите раздел, чтобы увидеть не обещание, а логику результата для собственника.</p>
+            <div className="section-heading section-heading--split system-heading">
+              <h2 id="system-title">Собираем автошколу в <span>единую систему управления</span></h2>
+              <p>Маркетинг, продажи, финансы, команда и филиалы начинают работать по общим правилам и показателям. Собственник видит, где теряются деньги, кто отвечает за результат и какие решения нужно принять.</p>
             </div>
-            <div className="transformation-layout">
-              <div className="transformation-tabs" role="tablist" aria-label="Направления перестройки">
-                {transformationAreas.map((area) => (
-                  <button key={area.id} className={area.id === activeArea ? 'transformation-tab is-active' : 'transformation-tab'} role="tab" aria-selected={area.id === activeArea} aria-controls="transformation-panel" type="button" onClick={() => setActiveArea(area.id)}>
-                    <span>{area.number}</span><strong>{area.title}</strong><ChevronDown aria-hidden="true" />
-                  </button>
-                ))}
-              </div>
-              <div id="transformation-panel" className="transformation-panel" role="tabpanel">
-                <div className="transformation-copy"><h3>{selectedArea.title}</h3><p>{selectedArea.description}</p></div>
-                <TransformationVisual area={selectedArea} />
-              </div>
+            <div className="system-areas">
+              {systemAreas.map((area) => <SystemAreaRow key={area.id} area={area} />)}
             </div>
-            <div className="system-modules" aria-label="Состав системы АСО">
-              {systemModules.map((module, index) => (
-                <article key={module.title}><span>0{index + 1}</span><h3>{module.title}</h3><p>{module.text}</p></article>
-              ))}
+            <div className="system-summary">
+              <p>Не меняем отдельный отдел в отрыве от остальных. Связываем ключевые процессы в одну систему, которой может управлять собственник.</p>
+              <button className="button button--primary" type="button" onClick={() => openQuiz('system-section')}>Получить разбор системы управления <ArrowRight aria-hidden="true" /></button>
             </div>
           </div>
         </section>
@@ -407,7 +395,7 @@ function App() {
                 <article className="process-step" key={step.number}>
                   <span className="process-step__number">{step.number}</span>
                   <div className="process-step__copy"><h3>{step.title}</h3><p>{step.action}</p><strong>{step.result}</strong></div>
-                  <div className="process-artifact"><ClipboardCheck aria-hidden="true" /><span>{step.artifact}</span><i aria-hidden="true" /></div>
+                  <div className="process-artifact"><img src={step.image} alt="" loading="lazy" /><span>{step.artifact}</span></div>
                 </article>
               ))}
             </div>
@@ -420,6 +408,7 @@ function App() {
               <p className="brand-kicker brand-kicker--light">Результат внедрения</p>
               <h2 id="deliverables-title">Система остаётся внутри вашей компании</h2>
               <p>Не презентация и не зависимость от внешнего консультанта, а рабочий комплект управления для владельца и команды.</p>
+              <button className="button button--light deliverables-cta" type="button" onClick={() => openQuiz('deliverables')}>Понять, что нужно вашей автошколе <ArrowRight aria-hidden="true" /></button>
             </div>
             <div className="deliverables-list">
               {deliverables.map((item) => <div key={item}><Check aria-hidden="true" /><span>{item}</span></div>)}
@@ -445,6 +434,9 @@ function App() {
               ))}
             </div>
             <p className="evidence-note"><ShieldCheck aria-hidden="true" /> Чувствительные данные закрываются до передачи материалов — конфиденциальность сохраняется на каждом этапе.</p>
+            <div className="section-action section-action--compact">
+              <button className="text-button" type="button" onClick={() => openQuiz('evidence')}>Обсудить формат материалов <ArrowRight aria-hidden="true" /></button>
+            </div>
           </div>
         </section>
 
@@ -455,6 +447,7 @@ function App() {
               <h2 id="founders-title">За системой стоят конкретные люди</h2>
               <p>Команда, которая работает над системой управления для автошкол.</p>
               <div className="founders-principle"><span>Принцип</span><strong>Система должна работать внутри бизнеса, а не существовать только в презентации.</strong></div>
+              <button className="button button--primary founders-cta" type="button" onClick={() => openQuiz('team')}>Оставить заявку команде <ArrowRight aria-hidden="true" /></button>
             </div>
             <div className="founders-visual founders-visual--team">
               <figure className="founder-team">
@@ -466,17 +459,22 @@ function App() {
 
         <section className="objections-section section-padding" aria-labelledby="objections-title">
           <div className="content-shell">
-            <div className="section-heading section-heading--split"><h2 id="objections-title">Вопросы, которые стоит задать до начала</h2><p>Спокойно разбираем формат, границы ответственности и риски — без давления и обещаний до диагностики.</p></div>
+            <div className="section-heading section-heading--split objections-heading">
+              <h2 id="objections-title">Вопросы, которые стоит задать до начала</h2>
+              <div><p>Спокойно разбираем формат, границы ответственности и риски — без давления и обещаний до диагностики.</p><button className="button button--primary" type="button" onClick={() => openQuiz('objections')}>Задать свой вопрос <ArrowRight aria-hidden="true" /></button></div>
+            </div>
             <div className="objections-list">
               {objections.map((item, index) => <article key={item.title}><span>0{index + 1}</span><h3>{item.title}</h3><p>{item.text}</p></article>)}
             </div>
           </div>
         </section>
 
-        <section className="quiz-cta-section">
-          <div className="content-shell quiz-cta-layout">
-            <div><p className="brand-kicker brand-kicker--light">Диагностика за несколько шагов</p><h2>Начните с вашей ситуации, а не с готового тарифа</h2><p>Ответьте на вопросы о регионе, текущем этапе и главной задаче. Это поможет сделать первый разговор предметным.</p></div>
-            <button className="button button--light button--large" type="button" onClick={() => openQuiz('diagnostic-cta')}>Пройти диагностику <ArrowRight aria-hidden="true" /></button>
+        <section className="quiz-cta-section" aria-labelledby="quiz-cta-title">
+          <div className="content-shell">
+            <div className="quiz-cta-card">
+              <div className="quiz-cta-copy"><p className="brand-kicker brand-kicker--light">Диагностика за несколько шагов</p><h2 id="quiz-cta-title">Начните с вашей ситуации, а не с готового тарифа</h2><p>Ответьте на вопросы о регионе, текущем этапе и главной задаче. Это поможет сделать первый разговор предметным.</p><button className="button button--light button--large" type="button" onClick={() => openQuiz('diagnostic-cta')}>Пройти диагностику <ArrowRight aria-hidden="true" /></button></div>
+              <img className="quiz-cta-visual" src={publicAsset('cta-target-icon.jpg')} alt="" loading="lazy" />
+            </div>
           </div>
         </section>
 
