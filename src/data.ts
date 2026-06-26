@@ -3,7 +3,6 @@ import type {
   Contacts,
   EvidenceItem,
   FaqItem,
-  FounderProfile,
   ProcessStep,
   TransformationArea,
 } from './types'
@@ -147,21 +146,6 @@ export const evidenceItems: EvidenceItem[] = [
     title: 'Рабочие документы',
     description: 'Регламенты, чек-листы и зоны ответственности.',
     kind: 'document',
-  },
-]
-
-const publicAsset = (fileName: string) => `${import.meta.env.BASE_URL}assets/${fileName}`
-
-export const founders: FounderProfile[] = [
-  {
-    image: publicAsset('founder-strategy.png'),
-    alt: 'Учредитель АСО в брендированном офисе',
-    confirmedLabel: 'Учредитель АСО',
-  },
-  {
-    image: publicAsset('founder-operations.png'),
-    alt: 'Учредитель АСО рядом с автомобилем в брендированном пространстве',
-    confirmedLabel: 'Учредитель АСО',
   },
 ]
 

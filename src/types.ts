@@ -29,12 +29,6 @@ export type EvidenceItem = {
   kind: 'report' | 'crm' | 'process' | 'document'
 }
 
-export type FounderProfile = {
-  image: string
-  alt: string
-  confirmedLabel: string
-}
-
 export type FaqItem = {
   question: string
   answer: string

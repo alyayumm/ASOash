@@ -22,7 +22,6 @@ import {
   audiencePaths,
   evidenceItems,
   faqItems,
-  founders,
   problems,
   processSteps,
   transformationAreas,
@@ -33,7 +32,7 @@ const navItems = [
   { href: '#directions', label: 'Направления' },
   { href: '#system', label: 'Система' },
   { href: '#process', label: 'Как работаем' },
-  { href: '#founders', label: 'Учредители' },
+  { href: '#founders', label: 'Команда' },
   { href: '#contact', label: 'Контакты' },
 ]
 
@@ -67,34 +66,37 @@ const directionCards = [
   },
 ] as const
 
+const iconSystemAsset = `${import.meta.env.BASE_URL}assets/creative-icon-system.png`
+const teamPhotoAsset = `${import.meta.env.BASE_URL}assets/aso-team-group.jpg`
+
 const lossFunnelRows = [
   {
     stage: 'Заявки',
     reason: 'Разные данные',
-    detail: 'Маркетинг и продажи считают результат по-разному.',
-    potentialWidth: 100,
-    lossWidth: 18,
+    detail: 'Маркетинг и продажи считают результат по-разному',
+    potentialWidth: 84,
+    lossWidth: 16,
   },
   {
     stage: 'Продажи',
     reason: 'Нет общей картины',
-    detail: 'Переходы между этапами видны не полностью.',
-    potentialWidth: 82,
-    lossWidth: 22,
+    detail: 'Переходы между этапами видны не полностью',
+    potentialWidth: 70,
+    lossWidth: 18,
   },
   {
     stage: 'Договоры',
     reason: 'План без факта',
-    detail: 'План не связан с реальными действиями команды.',
-    potentialWidth: 60,
-    lossWidth: 16,
+    detail: 'План не связан с реальными действиями команды',
+    potentialWidth: 56,
+    lossWidth: 14,
   },
   {
     stage: 'Решения',
     reason: 'Решения на ощущениях',
-    detail: 'Собственник собирает выводы вручную.',
-    potentialWidth: 44,
-    lossWidth: 14,
+    detail: 'Собственник собирает выводы вручную',
+    potentialWidth: 46,
+    lossWidth: 12,
   },
 ]
 
@@ -164,13 +166,6 @@ function ManagementPreview() {
         </div>
         <p>Сравнение по единым правилам</p>
       </article>
-      <article className="glass-panel preview-panel preview-panel--owner">
-        <Gauge aria-hidden="true" />
-        <div><strong>Контур собственника</strong><span>Общая картина для решений</span></div>
-      </article>
-      <div className="preview-route" aria-hidden="true">
-        <span>Маркетинг</span><i /><span>Продажи</span><i /><span>Экономика</span><i /><span>Решение</span>
-      </div>
     </div>
   )
 }
@@ -202,9 +197,10 @@ function TransformationVisual({ area }: { area: TransformationArea }) {
 function DirectionArt({ type }: { type: (typeof directionCards)[number]['art'] }) {
   return (
     <div className={`direction-art direction-art--${type}`} aria-hidden="true">
+      <span className={`direction-ref-icon direction-ref-icon--${type}`} style={{ backgroundImage: `url(${iconSystemAsset})` }} />
       {type === 'chart' ? <><i /><i /><i /><b /></> : null}
-      {type === 'route' ? <><i /><i /><i /></> : null}
-      {type === 'speed' ? <><i /><b /></> : null}
+      {type === 'route' ? <><i /><i /><i /><b /></> : null}
+      {type === 'speed' ? <><i /><b /><em /></> : null}
     </div>
   )
 }
@@ -271,7 +267,7 @@ function App() {
           <div className="hero-glow hero-glow--blue" aria-hidden="true" />
           <div className="hero-glow hero-glow--red" aria-hidden="true" />
           <div className="hero-copy">
-            <p className="brand-kicker">АСО Автошкола</p>
+            <p className="brand-kicker">АСО Автошкол</p>
             <h1 id="hero-title">Запуск и развитие автошкол <span>под ключ</span></h1>
             <p className="hero-promise">Система управления автошколой, которая работает без ручного контроля.</p>
             <p className="hero-lead">Проектируем управленческий контур: маркетинг, продажи, процессы и экономику. Сначала проводим диагностику ситуации, затем показываем, какие решения нужны именно вашей автошколе.</p>
@@ -364,7 +360,7 @@ function App() {
                 ))}
               </div>
               <div className="loss-funnel__summary">
-                <strong>−N% потенциальной прибыли</strong>
+                <strong>до 50% потерь потенциальной прибыли</strong>
                 <span>точный процент определяется после диагностики</span>
               </div>
             </div>
@@ -455,21 +451,15 @@ function App() {
         <section id="founders" className="founders-section section-padding" aria-labelledby="founders-title">
           <div className="content-shell founders-layout">
             <div className="founders-copy">
-              <p className="brand-kicker">Учредители АСО</p>
+              <p className="brand-kicker">Команда АСО</p>
               <h2 id="founders-title">За системой стоят конкретные люди</h2>
-              <p>Здесь представлены учредители компании АСО.</p>
+              <p>Команда, которая работает над системой управления для автошкол.</p>
               <div className="founders-principle"><span>Принцип</span><strong>Система должна работать внутри бизнеса, а не существовать только в презентации.</strong></div>
             </div>
-            <div className="founders-visual">
-              <figure className="founder founder--primary">
-                <img src={founders[0].image} alt={founders[0].alt} loading="lazy" />
-                <figcaption className="glass-panel"><span>{founders[0].confirmedLabel}</span></figcaption>
+            <div className="founders-visual founders-visual--team">
+              <figure className="founder-team">
+                <img src={teamPhotoAsset} alt="Команда АСО рядом с брендированным автомобилем" loading="eager" />
               </figure>
-              <figure className="founder founder--secondary">
-                <img src={founders[1].image} alt={founders[1].alt} loading="lazy" />
-                <figcaption><span>{founders[1].confirmedLabel}</span></figcaption>
-              </figure>
-              <svg className="founder-route" viewBox="0 0 600 500" aria-hidden="true"><path d="M115 390 C170 390, 150 250, 240 250 C330 250, 310 115, 430 115" /></svg>
             </div>
           </div>
         </section>
