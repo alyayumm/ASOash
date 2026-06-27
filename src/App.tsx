@@ -14,6 +14,9 @@ import {
 import { trackEvent } from './analytics'
 import teamPhotoAsset from './assets/aso-team-updated.png'
 import ctaSlidersIcon from './assets/cta-sliders-icon.png'
+import directionGrowthBg from './assets/direction-growth-bg.png'
+import directionLaunchBg from './assets/direction-launch-bg.png'
+import directionSystemBg from './assets/direction-system-bg.png'
 import { BrandLogo } from './components/BrandLogo'
 import { LeadForm } from './components/LeadForm'
 import { QuizDialog } from './components/QuizDialog'
@@ -42,29 +45,27 @@ const scenarioStatusByPath = {
   system: 'Ищу готовую систему',
 } as const
 
-const publicAsset = (fileName: string) => `${import.meta.env.BASE_URL}assets/${fileName}`
-
 const directionCards = [
   {
     id: 'growth',
     label: 'Развитие',
     title: 'Действующая автошкола',
     text: 'Собираем экономику, маркетинг, продажи и филиалы в управляемую модель.',
-    image: publicAsset('direction-growth-visual.jpg'),
+    image: directionGrowthBg,
   },
   {
     id: 'launch',
     label: 'Запуск',
     title: 'Автошкола с нуля',
     text: 'Проектируем маршрут запуска до первых затрат и случайных решений.',
-    image: publicAsset('direction-launch-visual.jpg'),
+    image: directionLaunchBg,
   },
   {
     id: 'system',
     label: 'Система',
     title: 'Готовый контур управления',
     text: 'Внедряем стандарты и инструменты так, чтобы контроль оставался у владельца.',
-    image: publicAsset('direction-system-visual.jpg'),
+    image: directionSystemBg,
   },
 ] as const
 
