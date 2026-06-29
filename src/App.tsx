@@ -496,13 +496,12 @@ function App() {
           <div className="content-shell">
             <div className="section-heading section-heading--split system-heading">
               <h2 id="system-title">Собираем автошколу в <span>единую систему управления</span></h2>
-              <p>Маркетинг, продажи, финансы, команда и филиалы начинают работать по общим правилам и показателям. Собственник видит, где теряются деньги, кто отвечает за результат и какие решения нужно принять.</p>
             </div>
             <div className="system-areas">
               {systemAreas.map((area) => <SystemAreaRow key={area.id} area={area} />)}
             </div>
             <div className="system-summary">
-              <p>В результате у собственника появляется единая картина: маркетинг, продажи, процессы, команда и экономика связаны между собой, а решения принимаются по понятным данным.</p>
+              <p>В итоге собственник видит общую картину и принимает решения по понятным данным.</p>
               <button className="button button--primary" type="button" onClick={() => openQuiz('system-section')}>Получить разбор системы управления <ArrowRight aria-hidden="true" /></button>
             </div>
           </div>
