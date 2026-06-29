@@ -46,6 +46,7 @@ export type LeadFormValues = {
   contactMethod: 'phone' | 'telegram' | 'whatsapp'
   comment: string
   consent: boolean
+  tracking: TrackingFields
 }
 
 export type QuizAnswers = {
@@ -58,6 +59,7 @@ export type QuizAnswers = {
   name: string
   phone: string
   consent: boolean
+  tracking: TrackingFields
 }
 
 export type Contacts = {
@@ -65,4 +67,22 @@ export type Contacts = {
   whatsapp: string
   phone: string
   email: string
+}
+
+export type TrackingFields = {
+  formId: string
+  source: string
+  pageUrl: string
+  landingPage: string
+  referrer: string
+  utmSource: string
+  utmMedium: string
+  utmCampaign: string
+  utmContent: string
+  utmTerm: string
+  yclid: string
+  gclid: string
+  fbclid: string
+  submittedAt: string
+  userAgent: string
 }

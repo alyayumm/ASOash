@@ -1,7 +1,9 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { ArrowLeft, ArrowRight, CheckCircle2, X } from 'lucide-react'
 import { trackEvent } from '../analytics'
+import { createTrackingFields } from '../trackingFields'
 import type { QuizAnswers } from '../types'
+import { HiddenTrackingInputs } from './HiddenTrackingInputs'
 
 type QuizDialogProps = {
   open: boolean
@@ -9,7 +11,7 @@ type QuizDialogProps = {
   initialStatus?: string
 }
 
-const initialAnswers: QuizAnswers = {
+const createInitialAnswers = (status = ''): QuizAnswers => ({
   status: '',
   region: '',
   branches: '',
@@ -19,7 +21,8 @@ const initialAnswers: QuizAnswers = {
   name: '',
   phone: '',
   consent: false,
-}
+  tracking: createTrackingFields('diagnostic-quiz', status ? 'scenario-prefilled' : 'diagnostic-quiz'),
+})
 
 const steps = [
   { key: 'status', title: 'На каком этапе вы сейчас?', options: ['Есть действующая автошкола', 'Планирую запуск', 'Ищу готовую систему'] },
@@ -45,7 +48,7 @@ function formatPhone(value: string) {
 }
 
 function answersWithStatus(status = ''): QuizAnswers {
-  return { ...initialAnswers, status }
+  return { ...createInitialAnswers(status), status }
 }
 
 export function QuizDialog({ open, onClose, initialStatus = '' }: QuizDialogProps) {
@@ -116,7 +119,7 @@ export function QuizDialog({ open, onClose, initialStatus = '' }: QuizDialogProp
     if (!validate()) return
     if (step === steps.length - 1) {
       setComplete(true)
-      trackEvent('quiz_submit', { status: answers.status })
+      trackEvent('quiz_submit', { status: answers.status, tracking: answers.tracking })
       return
     }
     const nextStep = step + 1
@@ -161,6 +164,7 @@ export function QuizDialog({ open, onClose, initialStatus = '' }: QuizDialogProp
                 </div>
               ) : current.key === 'contact' ? (
                 <div className="quiz-contact">
+                  <HiddenTrackingInputs fields={answers.tracking} />
                   <label><span>Имя</span><input value={answers.name} onChange={(event) => setAnswer('name', event.target.value)} autoComplete="name" /></label>
                   <label><span>Телефон</span><input value={answers.phone} onChange={(event) => setAnswer('phone', formatPhone(event.target.value))} inputMode="tel" autoComplete="tel" placeholder="+7 (___) ___-__-__" /></label>
                   <label className="consent"><input type="checkbox" checked={answers.consent} onChange={(event) => setAnswer('consent', event.target.checked)} /><span>Согласен на <a href="#personal-data-consent" target="_blank" rel="noreferrer">обработку персональных данных</a></span></label>

@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { ArrowRight, CheckCircle2 } from 'lucide-react'
 import { trackEvent } from '../analytics'
+import { createTrackingFields } from '../trackingFields'
 import type { LeadFormValues } from '../types'
+import { HiddenTrackingInputs } from './HiddenTrackingInputs'
 
-const initialValues: LeadFormValues = {
+const createInitialValues = (): LeadFormValues => ({
   name: '',
   phone: '',
   city: '',
@@ -11,7 +13,8 @@ const initialValues: LeadFormValues = {
   contactMethod: 'phone',
   comment: '',
   consent: false,
-}
+  tracking: createTrackingFields('lead-form', 'contact-section'),
+})
 
 function maskPhone(value: string) {
   const digits = value.replace(/\D/g, '').replace(/^8/, '7').slice(0, 11)
@@ -27,7 +30,7 @@ function maskPhone(value: string) {
 }
 
 export function LeadForm() {
-  const [values, setValues] = useState(initialValues)
+  const [values, setValues] = useState(createInitialValues)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle')
 
@@ -55,7 +58,7 @@ export function LeadForm() {
     setStatus('loading')
     window.setTimeout(() => {
       setStatus('success')
-      trackEvent('lead_submit', { status: values.status, contactMethod: values.contactMethod })
+      trackEvent('lead_submit', { status: values.status, contactMethod: values.contactMethod, tracking: values.tracking })
     }, 650)
   }
 
@@ -65,7 +68,7 @@ export function LeadForm() {
         <CheckCircle2 aria-hidden="true" />
         <h3>Заявка сохранена</h3>
         <p>Это локальная демонстрация. После подключения backend здесь появится реальная отправка менеджеру.</p>
-        <button className="text-button" type="button" onClick={() => { setValues(initialValues); setStatus('idle') }}>
+        <button className="text-button" type="button" onClick={() => { setValues(createInitialValues()); setStatus('idle') }}>
           Заполнить ещё раз
         </button>
       </div>
@@ -74,6 +77,7 @@ export function LeadForm() {
 
   return (
     <form className="lead-form" onSubmit={submit} noValidate>
+      <HiddenTrackingInputs fields={values.tracking} />
       <div className="field-row">
         <label>
           <span>Имя</span>

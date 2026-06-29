@@ -22,10 +22,8 @@ import { LeadForm } from './components/LeadForm'
 import { QuizDialog } from './components/QuizDialog'
 import {
   CONTACTS,
-  audiencePaths,
   evidenceItems,
   faqItems,
-  problems,
   processSteps,
   systemAreas,
 } from './data'
@@ -138,31 +136,6 @@ const objections = [
   },
 ]
 
-const mobileProblems = [
-  'Маркетинг и продажи работают по разным данным',
-  'Филиалы нельзя сравнить по единым правилам',
-  'Руководители заняты операционкой вместо показателей',
-  'Масштабирование добавляет хаос, а не управляемость',
-]
-
-const mobileAudiencePaths = {
-  growth: {
-    title: 'Автошкола уже работает',
-    description: 'Есть команда, продажи и филиалы.',
-    result: 'Собрать показатели в единую систему.',
-  },
-  launch: {
-    title: 'Планируется запуск',
-    description: 'Нужно спроектировать экономику и продажи до затрат.',
-    result: 'Получить маршрут запуска.',
-  },
-  system: {
-    title: 'Нужна готовая система',
-    description: 'Важны стандарты и сопровождение.',
-    result: 'Внедрить рабочий контур.',
-  },
-} as const
-
 const mobileDeliverables = [
   'Управленческая отчётность',
   'CRM-воронка и правила',
@@ -186,7 +159,6 @@ function ManagementPreview() {
     <div className="management-preview" aria-label="Пример управленческой системы без реальных данных">
       <div className="preview-orbit preview-orbit--one" aria-hidden="true" />
       <div className="preview-orbit preview-orbit--two" aria-hidden="true" />
-      <div className="preview-system-title" aria-hidden="true">Контур собственника</div>
       <article className="glass-panel preview-panel preview-panel--plan">
         <div className="preview-panel__heading"><span>План / факт</span><LineChart aria-hidden="true" /></div>
         <div className="bar-chart" aria-hidden="true">
@@ -443,7 +415,10 @@ function App() {
           <div className="hero-glow hero-glow--blue" aria-hidden="true" />
           <div className="hero-glow hero-glow--red" aria-hidden="true" />
           <div className="hero-copy">
-            <h1 id="hero-title">Запуск и развитие автошкол <span>под ключ</span></h1>
+            <h1 id="hero-title">
+              <span className="hero-title-line">Запуск и развитие</span>
+              <span className="hero-title-line">автошкол <em>под ключ</em></span>
+            </h1>
             <p className="hero-promise">Система управления автошколой, которая работает без ручного контроля.</p>
             <p className="hero-lead">Проектируем управленческий контур: маркетинг, продажи, процессы и экономику. Сначала проводим диагностику ситуации, затем показываем, какие решения нужны именно вашей автошколе.</p>
             <div className="hero-actions">
@@ -456,51 +431,6 @@ function App() {
             </ul>
           </div>
           <ManagementPreview />
-        </section>
-
-        <section className="statement-section">
-          <div className="content-shell statement-layout">
-            <h2>
-              <span className="desktop-copy copy-switch copy-block">Автошкола может расти в выручке и одновременно <span className="accent-copy">терять прибыль, контроль и время собственника</span></span>
-              <span className="mobile-copy copy-switch copy-block">Где теряется <span className="accent-copy">прибыль, контроль и время</span></span>
-            </h2>
-            <div className="statement-points">
-              {problems.map((problem, index) => (
-                <div className={index === 1 ? 'statement-point is-accented' : 'statement-point'} key={problem}>
-                  <span>0{index + 1}</span><p><span className="desktop-copy">{problem}</span><span className="mobile-copy">{mobileProblems[index] ?? problem}</span></p>
-                </div>
-              ))}
-              <button className="text-button section-cta" type="button" onClick={() => openQuiz('statement')}>Разобрать текущую ситуацию <ArrowRight aria-hidden="true" /></button>
-            </div>
-          </div>
-        </section>
-
-        <section className="audience-section section-padding" aria-labelledby="audience-title">
-          <div className="content-shell">
-            <div className="section-heading section-heading--stack">
-              <h2 id="audience-title">
-                <span className="desktop-copy copy-switch copy-block">Три ситуации.<br />Одна задача — <span className="accent-copy">управляемый бизнес</span></span>
-                <span className="mobile-copy copy-switch copy-block">Три ситуации.<br /><span className="accent-copy">Одна задача — управляемость</span></span>
-              </h2>
-              <p><span className="desktop-copy">Мы начинаем не с готового пакета, а с того, где находится автошкола сейчас и какую систему нужно построить.</span><span className="mobile-copy">Начинаем с текущей ситуации и подбираем систему, которую нужно построить.</span></p>
-            </div>
-            <div className="audience-paths">
-              {audiencePaths.map((path) => (
-                <article className={`audience-path audience-path--${path.id}`} key={path.id}>
-                  <span className="audience-path__number">{path.number}</span>
-                  <div>
-                    <h3><span className="desktop-copy">{path.title}</span><span className="mobile-copy">{mobileAudiencePaths[path.id].title}</span></h3>
-                    <p><span className="desktop-copy">{path.description}</span><span className="mobile-copy">{mobileAudiencePaths[path.id].description}</span></p>
-                  </div>
-                  <strong><span className="desktop-copy">{path.result}</span><span className="mobile-copy">{mobileAudiencePaths[path.id].result}</span></strong>
-                  <button type="button" className="round-link" onClick={() => openQuiz(`audience-${path.id}`, scenarioStatusByPath[path.id])} aria-label={`Пройти диагностику: ${path.title}`}><ArrowRight aria-hidden="true" /></button>
-                </article>
-              ))}
-            </div>
-            <div className="section-action">
-              <button className="button button--primary" type="button" onClick={() => openQuiz('audience')}>Выбрать свой сценарий <ArrowRight aria-hidden="true" /></button>
-            </div>
-          </div>
         </section>
 
         <section id="directions" className="directions-section section-padding" aria-labelledby="directions-title">
@@ -518,6 +448,7 @@ function App() {
                     <p>{card.text}</p>
                   </div>
                   <DirectionArt card={card} />
+                  <button type="button" className="round-link direction__action" onClick={() => openQuiz(`directions-${card.id}`, scenarioStatusByPath[card.id])} aria-label={`Пройти диагностику: ${card.title}`}><ArrowRight aria-hidden="true" /></button>
                 </article>
               ))}
             </div>
