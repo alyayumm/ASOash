@@ -313,8 +313,7 @@ p {
 }
 
 .brand-logo--inverse .brand-logo__image {
-  filter: brightness(0) invert(1);
-  opacity: 0.92;
+  opacity: 1;
 }
 
 .desktop-nav {
@@ -3496,12 +3495,14 @@ section[id],
 
   .quiz-cta-card {
     grid-template-columns: 1fr;
-    padding-bottom: 190px;
+    padding-bottom: 260px;
   }
 
   .quiz-cta-visual {
-    right: 16px;
-    width: 240px;
+    right: 50%;
+    bottom: -124px;
+    width: min(310px, 82vw);
+    transform: translateX(50%);
   }
 }
 
@@ -4540,8 +4541,9 @@ section[id],
   }
 
   .evidence-section .evidence-collage {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr);
     gap: 8px;
+    max-width: 264px;
   }
 
   .evidence-section .evidence-item {
@@ -4551,6 +4553,10 @@ section[id],
     display: grid;
     place-items: center;
     overflow: hidden;
+  }
+
+  .evidence-section .evidence-item:not(:first-child) {
+    display: none !important;
   }
 
   .evidence-section .evidence-item__top,

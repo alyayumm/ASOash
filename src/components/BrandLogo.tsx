@@ -1,4 +1,5 @@
-import logoAsset from '../assets/aso-logo-transparent-cropped.png'
+import logoColorAsset from '../assets/aso-logo-color.png'
+import logoWhiteAsset from '../assets/aso-logo-white.png'
 
 type BrandLogoProps = {
   inverse?: boolean
@@ -6,8 +7,8 @@ type BrandLogoProps = {
 
 export function BrandLogo({ inverse = false }: BrandLogoProps) {
   return (
-    <span className={`brand-logo${inverse ? ' brand-logo--inverse' : ''}`} aria-label="АСО Автошкол">
-      <img className="brand-logo__image" src={logoAsset} alt="" aria-hidden="true" />
+    <span className={`brand-logo${inverse ? ' brand-logo--inverse' : ''}`} aria-label="ASO Avtoshkol">
+      <img className="brand-logo__image" src={inverse ? logoWhiteAsset : logoColorAsset} alt="" aria-hidden="true" />
     </span>
   )
 }

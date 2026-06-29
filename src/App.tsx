@@ -511,7 +511,7 @@ function App() {
           <div className="content-shell process-layout">
             <div className="process-intro">
               <p className="brand-kicker">Как проходит работа</p>
-              <h2 id="process-title">От первой картины до системы, которая остаётся у вас</h2>
+              <h2 id="process-title">От диагностики до рабочего контура управления</h2>
               <p>Этапы идут последовательно. Объём и глубина определяются после знакомства с исходной ситуацией.</p>
               <button className="text-button" type="button" onClick={() => openQuiz('process')}>Пройти диагностику <ArrowRight aria-hidden="true" /></button>
             </div>
