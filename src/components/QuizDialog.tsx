@@ -163,7 +163,7 @@ export function QuizDialog({ open, onClose, initialStatus = '' }: QuizDialogProp
                 <div className="quiz-contact">
                   <label><span>Имя</span><input value={answers.name} onChange={(event) => setAnswer('name', event.target.value)} autoComplete="name" /></label>
                   <label><span>Телефон</span><input value={answers.phone} onChange={(event) => setAnswer('phone', formatPhone(event.target.value))} inputMode="tel" autoComplete="tel" placeholder="+7 (___) ___-__-__" /></label>
-                  <label className="consent"><input type="checkbox" checked={answers.consent} onChange={(event) => setAnswer('consent', event.target.checked)} /><span>Согласен на обработку персональных данных</span></label>
+                  <label className="consent"><input type="checkbox" checked={answers.consent} onChange={(event) => setAnswer('consent', event.target.checked)} /><span>Согласен на <a href="#personal-data-consent" target="_blank" rel="noreferrer">обработку персональных данных</a></span></label>
                 </div>
               ) : current.key === 'result' ? (
                 <textarea value={answers.result} onChange={(event) => setAnswer('result', event.target.value)} rows={5} placeholder={current.placeholder} autoFocus />

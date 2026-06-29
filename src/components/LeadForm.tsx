@@ -118,7 +118,7 @@ export function LeadForm() {
       </label>
       <label className="consent">
         <input type="checkbox" checked={values.consent} onChange={(event) => update('consent', event.target.checked)} aria-invalid={Boolean(errors.consent)} aria-describedby={errors.consent ? 'lead-consent-error' : undefined} />
-        <span>Согласен на обработку персональных данных</span>
+        <span>Согласен на <a href="#personal-data-consent" target="_blank" rel="noreferrer">обработку персональных данных</a></span>
       </label>
       {errors.consent ? <small id="lead-consent-error" className="field-error field-error--standalone" role="alert">{errors.consent}</small> : null}
       <button className="button button--primary button--wide" type="submit" disabled={status === 'loading'}>

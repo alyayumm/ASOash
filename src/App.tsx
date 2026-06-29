@@ -1,4 +1,4 @@
-import { useCallback, useState, type CSSProperties } from 'react'
+import { useCallback, useEffect, useState, type CSSProperties } from 'react'
 import {
   ArrowRight,
   Building2,
@@ -296,11 +296,108 @@ function MessengerButton({ kind, contacts }: { kind: 'telegram' | 'whatsapp'; co
   return <a className="messenger-link" href={href} target="_blank" rel="noreferrer" onClick={() => trackEvent('messenger_click', { kind })}>{label}<ArrowRight aria-hidden="true" /></a>
 }
 
+function PersonalDataConsentPage() {
+  return (
+    <>
+      <header className="system-page-header">
+        <div className="content-shell system-page-header__shell">
+          <a className="header-logo-link" href="./" aria-label="АСО Автошкол — на главную страницу"><BrandLogo /></a>
+          <a className="button button--primary" href="./">На главную</a>
+        </div>
+      </header>
+      <main className="system-page" id="top">
+        <section className="system-page-hero">
+          <div className="content-shell system-page-hero__layout">
+            <p className="brand-kicker">Системная страница</p>
+            <h1>Согласие на обработку персональных данных</h1>
+            <p>Текст согласия нужен для форм предварительного разбора и диагностического квиза на сайте АСО Автошкол. Реквизиты оператора и контакты для обращений должны быть заполнены после юридического подтверждения.</p>
+          </div>
+        </section>
+
+        <section className="system-page-content">
+          <div className="content-shell legal-document">
+            <div className="legal-notice">
+              <strong>Важно</strong>
+              <span>Это рабочий шаблон для сайта. Перед публикацией с реальными заявками нужно указать оператора персональных данных, контакты и проверить текст у юриста.</span>
+            </div>
+
+            <article className="legal-section">
+              <h2>1. Согласие пользователя</h2>
+              <p>Пользователь, заполняя форму на сайте и отмечая чекбокс согласия, свободно, своей волей и в своём интересе даёт согласие оператору персональных данных на обработку указанных им данных.</p>
+              <p><strong>Оператор:</strong> [указать полное наименование юридического лица или ИП].</p>
+              <p><strong>Сайт:</strong> текущий сайт АСО Автошкол.</p>
+            </article>
+
+            <article className="legal-section">
+              <h2>2. Какие данные могут обрабатываться</h2>
+              <ul>
+                <li>имя;</li>
+                <li>номер телефона;</li>
+                <li>город или регион;</li>
+                <li>текущая ситуация автошколы;</li>
+                <li>предпочтительный способ связи;</li>
+                <li>комментарий и ответы диагностического квиза;</li>
+                <li>технические данные, если они фиксируются системами аналитики сайта.</li>
+              </ul>
+            </article>
+
+            <article className="legal-section">
+              <h2>3. Цели обработки</h2>
+              <ul>
+                <li>обработка заявки на предварительный разбор;</li>
+                <li>связь с пользователем по указанным контактам;</li>
+                <li>подготовка первого разговора по ситуации автошколы;</li>
+                <li>ведение внутреннего учёта обращений;</li>
+                <li>улучшение работы сайта и форм обратной связи.</li>
+              </ul>
+            </article>
+
+            <article className="legal-section">
+              <h2>4. Действия с персональными данными</h2>
+              <p>Согласие распространяется на сбор, запись, систематизацию, накопление, хранение, уточнение, использование, передачу внутри команды оператора, обезличивание, блокирование, удаление и уничтожение персональных данных.</p>
+              <p>Оператор не должен публиковать персональные данные пользователя в открытом доступе без отдельного согласия.</p>
+            </article>
+
+            <article className="legal-section">
+              <h2>5. Срок действия согласия</h2>
+              <p>Согласие действует до достижения целей обработки или до его отзыва пользователем. Сроки хранения и порядок удаления нужно уточнить после утверждения внутренней политики обработки данных.</p>
+            </article>
+
+            <article className="legal-section">
+              <h2>6. Отзыв согласия</h2>
+              <p>Пользователь может отозвать согласие, направив обращение оператору.</p>
+              <p><strong>Контакт для отзыва:</strong> [указать email или иной подтверждённый канал связи].</p>
+              <p>После получения отзыва оператор прекращает обработку персональных данных, если дальнейшая обработка не требуется по закону.</p>
+            </article>
+
+            <article className="legal-section">
+              <h2>7. Передача третьим лицам</h2>
+              <p>Передача персональных данных третьим лицам допускается только для целей обработки заявки, обеспечения работы сайта и связи с пользователем, а также в случаях, предусмотренных законом.</p>
+            </article>
+
+            <article className="legal-section">
+              <h2>8. Дата версии</h2>
+              <p>Версия страницы: 29 июня 2026 года.</p>
+            </article>
+          </div>
+        </section>
+      </main>
+    </>
+  )
+}
+
 function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [quizOpen, setQuizOpen] = useState(false)
   const [initialQuizStatus, setInitialQuizStatus] = useState('')
   const [openFaq, setOpenFaq] = useState(0)
+  const [hashRoute, setHashRoute] = useState(() => window.location.hash)
+
+  useEffect(() => {
+    const onHashChange = () => setHashRoute(window.location.hash)
+    window.addEventListener('hashchange', onHashChange)
+    return () => window.removeEventListener('hashchange', onHashChange)
+  }, [])
 
   const closeQuiz = useCallback(() => {
     setQuizOpen(false)
@@ -315,6 +412,10 @@ function App() {
   const scrollToContact = (source: string) => {
     trackEvent('cta_click', { source })
     document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  if (hashRoute === '#personal-data-consent') {
+    return <PersonalDataConsentPage />
   }
 
   return (
@@ -604,7 +705,10 @@ function App() {
           <div><BrandLogo inverse /><p>Ассоциация современного образования автошкол России.</p></div>
           <div className="footer-nav">{navItems.slice(0, 4).map((item) => <a key={item.href} href={item.href}>{item.label}</a>)}</div>
           <div className="footer-messengers"><MessengerButton kind="telegram" contacts={CONTACTS} /><MessengerButton kind="whatsapp" contacts={CONTACTS} /></div>
-          {import.meta.env.DEV ? <div className="footer-legal"><span>Юридические данные не заполнены</span><span>Политика обработки данных — TODO</span></div> : null}
+          <div className="footer-legal">
+            <a href="#personal-data-consent">Согласие на обработку персональных данных</a>
+            {import.meta.env.DEV ? <span>Юридические данные не заполнены</span> : null}
+          </div>
         </div>
       </footer>
 
