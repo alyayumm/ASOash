@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { ArrowLeft, ArrowRight, CheckCircle2, X } from 'lucide-react'
 import { trackEvent } from '../analytics'
+import { getLeadSubmitErrorMessage, sendLead } from '../leadDelivery'
 import { createTrackingFields } from '../trackingFields'
 import type { QuizAnswers } from '../types'
 import { HiddenTrackingInputs } from './HiddenTrackingInputs'
@@ -12,7 +13,7 @@ type QuizDialogProps = {
 }
 
 const createInitialAnswers = (status = ''): QuizAnswers => ({
-  status: '',
+  status,
   region: '',
   branches: '',
   task: '',
@@ -27,7 +28,7 @@ const createInitialAnswers = (status = ''): QuizAnswers => ({
 const steps = [
   { key: 'status', title: 'На каком этапе вы сейчас?', options: ['Есть действующая автошкола', 'Планирую запуск', 'Ищу готовую систему'] },
   { key: 'region', title: 'В каком регионе находится проект?', placeholder: 'Город или регион' },
-  { key: 'branches', title: 'Сколько филиалов работает сейчас?', options: ['Пока нет', 'Один', 'Два–три', 'Четыре и больше'] },
+  { key: 'branches', title: 'Сколько филиалов работает сейчас?', options: ['Пока нет', 'Один', 'Два-три', 'Четыре и больше'] },
   { key: 'task', title: 'Какая задача сейчас главная?', options: ['Увеличить продажи', 'Навести порядок в управлении', 'Подготовить запуск', 'Масштабировать сеть'] },
   { key: 'problem', title: 'Что сильнее всего мешает?', options: ['Нет общей аналитики', 'Продажи зависят от людей', 'Собственник в операционке', 'Нет единых процессов'] },
   { key: 'result', title: 'Какой результат хотите обсудить?', placeholder: 'Опишите своими словами' },
@@ -47,30 +48,38 @@ function formatPhone(value: string) {
   return result
 }
 
-function answersWithStatus(status = ''): QuizAnswers {
-  return { ...createInitialAnswers(status), status }
-}
-
 export function QuizDialog({ open, onClose, initialStatus = '' }: QuizDialogProps) {
   const titleId = useId()
   const dialogRef = useRef<HTMLDivElement>(null)
   const restoreFocusRef = useRef<HTMLElement | null>(null)
   const [step, setStep] = useState(() => (initialStatus ? 1 : 0))
-  const [answers, setAnswers] = useState(() => answersWithStatus(initialStatus))
+  const [answers, setAnswers] = useState(() => createInitialAnswers(initialStatus))
   const [error, setError] = useState('')
   const [complete, setComplete] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
     if (!open) return
+
+    const resetTimer = window.setTimeout(() => {
+      setStep(initialStatus ? 1 : 0)
+      setAnswers(createInitialAnswers(initialStatus))
+      setError('')
+      setComplete(false)
+      setSubmitting(false)
+    }, 0)
+
     restoreFocusRef.current = document.activeElement as HTMLElement
     const dialog = dialogRef.current
-    dialog?.querySelector<HTMLElement>('button, input, textarea')?.focus()
+    const focusTimer = window.setTimeout(() => dialog?.querySelector<HTMLElement>('button, input, textarea')?.focus(), 0)
     document.body.classList.add('modal-open')
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') onClose()
       if (event.key !== 'Tab' || !dialog) return
-      const focusable = Array.from(dialog.querySelectorAll<HTMLElement>('button:not([disabled]), input:not([disabled]), textarea:not([disabled])'))
+      const focusable = Array.from(
+        dialog.querySelectorAll<HTMLElement>('button:not([disabled]), input:not([disabled]), textarea:not([disabled])'),
+      )
       if (!focusable.length) return
       const first = focusable[0]
       const last = focusable[focusable.length - 1]
@@ -85,15 +94,18 @@ export function QuizDialog({ open, onClose, initialStatus = '' }: QuizDialogProp
 
     document.addEventListener('keydown', onKeyDown)
     return () => {
+      window.clearTimeout(resetTimer)
+      window.clearTimeout(focusTimer)
       document.removeEventListener('keydown', onKeyDown)
       document.body.classList.remove('modal-open')
       restoreFocusRef.current?.focus()
     }
-  }, [open, onClose])
+  }, [open, onClose, initialStatus])
 
   if (!open) return null
 
   const current = steps[step]
+
   const setAnswer = (key: keyof QuizAnswers, value: string | boolean) => {
     setAnswers((previous) => ({ ...previous, [key]: value }))
     setError('')
@@ -107,6 +119,7 @@ export function QuizDialog({ open, onClose, initialStatus = '' }: QuizDialogProp
       }
       return true
     }
+
     const value = answers[current.key as keyof QuizAnswers]
     if (!value) {
       setError('Выберите или заполните ответ')
@@ -115,40 +128,81 @@ export function QuizDialog({ open, onClose, initialStatus = '' }: QuizDialogProp
     return true
   }
 
-  const next = () => {
-    if (!validate()) return
+  const next = async () => {
+    if (submitting || !validate()) return
+
     if (step === steps.length - 1) {
-      setComplete(true)
-      trackEvent('quiz_submit', { status: answers.status, tracking: answers.tracking })
+      setSubmitting(true)
+
+      try {
+        await sendLead({
+          kind: 'quiz',
+          formName: 'Диагностический квиз',
+          values: {
+            status: answers.status,
+            region: answers.region.trim(),
+            branches: answers.branches,
+            task: answers.task,
+            problem: answers.problem,
+            result: answers.result.trim(),
+            name: answers.name.trim(),
+            phone: answers.phone,
+            consent: answers.consent,
+          },
+          tracking: answers.tracking,
+        })
+
+        setComplete(true)
+        trackEvent('quiz_submit', { status: answers.status, tracking: answers.tracking })
+      } catch (submitError) {
+        setError(getLeadSubmitErrorMessage(submitError))
+        trackEvent('quiz_submit_error', {
+          error: submitError instanceof Error ? submitError.name : 'unknown',
+          tracking: answers.tracking,
+        })
+      } finally {
+        setSubmitting(false)
+      }
       return
     }
+
     const nextStep = step + 1
     setStep(nextStep)
     trackEvent('quiz_step', { step: nextStep + 1 })
   }
 
-  const close = () => {
-    onClose()
-  }
-
   return (
-    <div className="dialog-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) close() }}>
+    <div
+      className="dialog-backdrop"
+      role="presentation"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) onClose()
+      }}
+    >
       <div ref={dialogRef} className="quiz-dialog" role="dialog" aria-modal="true" aria-labelledby={titleId}>
-        <button className="icon-button quiz-dialog__close" type="button" onClick={close} aria-label="Закрыть диагностику"><X aria-hidden="true" /></button>
+        <button className="icon-button quiz-dialog__close" type="button" onClick={onClose} aria-label="Закрыть диагностику">
+          <X aria-hidden="true" />
+        </button>
         {complete ? (
           <div className="quiz-complete" role="status" aria-live="polite">
             <CheckCircle2 aria-hidden="true" />
-            <h2 id={titleId}>Ответы сохранены</h2>
-            <p>Это локальная демонстрация. После подключения backend ответы будут передаваться менеджеру вместе с контактами.</p>
-            <button className="button button--primary" type="button" onClick={close}>Закрыть</button>
+            <h2 id={titleId}>Ответы отправлены</h2>
+            <p>Мы получили контакты и ответы диагностики. Вернёмся с предварительным разбором.</p>
+            <button className="button button--primary" type="button" onClick={onClose}>
+              Закрыть
+            </button>
           </div>
         ) : (
           <>
             <div className="quiz-dialog__meta">
               <span>Диагностика ситуации</span>
-              <span>{step + 1} / {steps.length}</span>
+              <span>
+                {step + 1} / {steps.length}
+              </span>
             </div>
-            <div className="quiz-progress" aria-hidden="true"><span style={{ width: `${((step + 1) / steps.length) * 100}%` }} /></div>
+            <div className="quiz-progress" aria-hidden="true">
+              <span style={{ width: `${((step + 1) / steps.length) * 100}%` }} />
+            </div>
             <h2 id={titleId}>{current.title}</h2>
             <div className="quiz-answer">
               {'options' in current ? (
@@ -156,7 +210,12 @@ export function QuizDialog({ open, onClose, initialStatus = '' }: QuizDialogProp
                   {current.options.map((option) => {
                     const key = current.key as keyof QuizAnswers
                     return (
-                      <button key={option} type="button" className={answers[key] === option ? 'quiz-option is-selected' : 'quiz-option'} onClick={() => setAnswer(key, option)}>
+                      <button
+                        key={option}
+                        type="button"
+                        className={answers[key] === option ? 'quiz-option is-selected' : 'quiz-option'}
+                        onClick={() => setAnswer(key, option)}
+                      >
                         {option}
                       </button>
                     )
@@ -165,23 +224,71 @@ export function QuizDialog({ open, onClose, initialStatus = '' }: QuizDialogProp
               ) : current.key === 'contact' ? (
                 <div className="quiz-contact">
                   <HiddenTrackingInputs fields={answers.tracking} />
-                  <label><span>Имя</span><input value={answers.name} onChange={(event) => setAnswer('name', event.target.value)} autoComplete="name" /></label>
-                  <label><span>Телефон</span><input value={answers.phone} onChange={(event) => setAnswer('phone', formatPhone(event.target.value))} inputMode="tel" autoComplete="tel" placeholder="+7 (___) ___-__-__" /></label>
-                  <label className="consent"><input type="checkbox" checked={answers.consent} onChange={(event) => setAnswer('consent', event.target.checked)} /><span>Согласен на <a href="#personal-data-consent" target="_blank" rel="noreferrer">обработку персональных данных</a></span></label>
+                  <label>
+                    <span>Имя</span>
+                    <input value={answers.name} onChange={(event) => setAnswer('name', event.target.value)} autoComplete="name" />
+                  </label>
+                  <label>
+                    <span>Телефон</span>
+                    <input
+                      value={answers.phone}
+                      onChange={(event) => setAnswer('phone', formatPhone(event.target.value))}
+                      inputMode="tel"
+                      autoComplete="tel"
+                      placeholder="+7 (___) ___-__-__"
+                    />
+                  </label>
+                  <label className="consent">
+                    <input
+                      type="checkbox"
+                      checked={answers.consent}
+                      onChange={(event) => setAnswer('consent', event.target.checked)}
+                    />
+                    <span>
+                      Согласен на{' '}
+                      <a href="#personal-data-consent" target="_blank" rel="noreferrer">
+                        обработку персональных данных
+                      </a>
+                    </span>
+                  </label>
                 </div>
               ) : current.key === 'result' ? (
-                <textarea value={answers.result} onChange={(event) => setAnswer('result', event.target.value)} rows={5} placeholder={current.placeholder} autoFocus />
+                <textarea
+                  value={answers.result}
+                  onChange={(event) => setAnswer('result', event.target.value)}
+                  rows={5}
+                  placeholder={current.placeholder}
+                  autoFocus
+                />
               ) : (
-                <input value={answers.region} onChange={(event) => setAnswer('region', event.target.value)} placeholder={current.placeholder} autoFocus />
+                <input
+                  value={answers.region}
+                  onChange={(event) => setAnswer('region', event.target.value)}
+                  placeholder={current.placeholder}
+                  autoFocus
+                />
               )}
             </div>
-            {error ? <p className="quiz-error" role="alert">{error}</p> : null}
+            {error ? (
+              <p className="quiz-error" role="alert">
+                {error}
+              </p>
+            ) : null}
             <div className="quiz-dialog__actions">
-              <button className="button button--ghost" type="button" onClick={() => { setStep((currentStep) => Math.max(0, currentStep - 1)); setError('') }} disabled={step === 0}>
+              <button
+                className="button button--ghost"
+                type="button"
+                onClick={() => {
+                  setStep((currentStep) => Math.max(0, currentStep - 1))
+                  setError('')
+                }}
+                disabled={step === 0 || submitting}
+              >
                 <ArrowLeft aria-hidden="true" /> Назад
               </button>
-              <button className="button button--primary" type="button" onClick={next}>
-                {step === steps.length - 1 ? 'Сохранить ответы' : 'Продолжить'} <ArrowRight aria-hidden="true" />
+              <button className="button button--primary" type="button" onClick={next} disabled={submitting}>
+                {submitting ? 'Отправляем...' : step === steps.length - 1 ? 'Сохранить ответы' : 'Продолжить'}
+                {submitting ? null : <ArrowRight aria-hidden="true" />}
               </button>
             </div>
           </>

@@ -85,4 +85,7 @@ export type TrackingFields = {
   fbclid: string
   submittedAt: string
   userAgent: string
+  language: string
+  timezone: string
+  screenSize: string
 }

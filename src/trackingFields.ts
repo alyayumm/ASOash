@@ -26,6 +26,22 @@ const getLandingPage = () => {
   return current
 }
 
+const getTimezone = () => {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone || ''
+  } catch {
+    return ''
+  }
+}
+
+const getScreenSize = () => {
+  try {
+    return `${window.screen.width}x${window.screen.height}`
+  } catch {
+    return ''
+  }
+}
+
 export function createTrackingFields(formId: string, source: string): TrackingFields {
   const params = new URLSearchParams(window.location.search)
 
@@ -45,5 +61,8 @@ export function createTrackingFields(formId: string, source: string): TrackingFi
     fbclid: params.get('fbclid') || '',
     submittedAt: new Date().toISOString(),
     userAgent: navigator.userAgent || '',
+    language: navigator.language || '',
+    timezone: getTimezone(),
+    screenSize: getScreenSize(),
   }
 }

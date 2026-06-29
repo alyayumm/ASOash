@@ -16,6 +16,9 @@ const trackingFieldNames: Array<keyof TrackingFields> = [
   'fbclid',
   'submittedAt',
   'userAgent',
+  'language',
+  'timezone',
+  'screenSize',
 ]
 
 export function HiddenTrackingInputs({ fields }: { fields: TrackingFields }) {
