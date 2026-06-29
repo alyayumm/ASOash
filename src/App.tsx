@@ -138,6 +138,49 @@ const objections = [
   },
 ]
 
+const mobileProblems = [
+  'Маркетинг и продажи работают по разным данным',
+  'Филиалы нельзя сравнить по единым правилам',
+  'Руководители заняты операционкой вместо показателей',
+  'Масштабирование добавляет хаос, а не управляемость',
+]
+
+const mobileAudiencePaths = {
+  growth: {
+    title: 'Автошкола уже работает',
+    description: 'Есть команда, продажи и филиалы.',
+    result: 'Собрать показатели в единую систему.',
+  },
+  launch: {
+    title: 'Планируется запуск',
+    description: 'Нужно спроектировать экономику и продажи до затрат.',
+    result: 'Получить маршрут запуска.',
+  },
+  system: {
+    title: 'Нужна готовая система',
+    description: 'Важны стандарты и сопровождение.',
+    result: 'Внедрить рабочий контур.',
+  },
+} as const
+
+const mobileDeliverables = [
+  'Управленческая отчётность',
+  'CRM-воронка и правила',
+  'План-факт и контроль',
+  'Стандарты и чек-листы',
+  'Зоны ответственности',
+  'Ритм планёрок',
+  'Сравнение филиалов',
+  'Инструменты решений',
+]
+
+const mobileObjectionTexts = [
+  'Система настраивается внутри компании, правила контроля остаются у владельца.',
+  'Регион учитывается в диагностике и настройке модели работы.',
+  'Внедрение включает работу с командой и первые циклы применения.',
+  'Сначала определяем задачу и нужную глубину диагностики.',
+]
+
 function ManagementPreview() {
   return (
     <div className="management-preview" aria-label="Пример управленческой системы без реальных данных">
@@ -172,20 +215,61 @@ function ManagementPreview() {
 function SystemAreaRow({ area }: { area: SystemArea }) {
   return (
     <article className="system-area">
-      <div className="system-area__header">
-        <span className="system-area__number">{area.number}</span>
-        <div>
-          <h3>{area.title}</h3>
-          <p className="system-area__formula"><span>{area.shortBefore}</span><i aria-hidden="true" /><strong>{area.shortAfter}</strong></p>
+      <details className="system-area-mobile">
+        <summary>
+          <span className="system-area__number">{area.number}</span>
+          <span>{area.title}</span>
+          <ChevronDown aria-hidden="true" />
+        </summary>
+        <div className="system-area-mobile__body">
+          <p><span>Сейчас</span>{area.currentState}</p>
+          <p><span>Внедряем</span>{area.implementation}</p>
+          <strong>{area.result}</strong>
+          <div className="system-area__tools" aria-label={`Инструменты: ${area.title}`}>
+            {area.tools.slice(0, 3).map((tool) => <span className="system-area__tool" key={tool}>{tool}</span>)}
+          </div>
+        </div>
+      </details>
+      <div className="system-area-desktop">
+        <div className="system-area__header">
+          <span className="system-area__number">{area.number}</span>
+          <div>
+            <h3>{area.title}</h3>
+            <p className="system-area__formula"><span>{area.shortBefore}</span><i aria-hidden="true" /><strong>{area.shortAfter}</strong></p>
+          </div>
+        </div>
+        <div className="system-area__flow">
+          <div className="system-area__stage system-area__stage--current"><span>Сейчас</span><p>{area.currentState}</p></div>
+          <div className="system-area__stage system-area__stage--implementation"><span>Что внедряем</span><p>{area.implementation}</p></div>
+          <div className="system-area__stage system-area__stage--result"><span>Результат</span><p>{area.result}</p></div>
+        </div>
+        <div className="system-area__tools" aria-label={`Инструменты: ${area.title}`}>
+          {area.tools.map((tool) => <span className="system-area__tool" key={tool}>{tool}</span>)}
         </div>
       </div>
-      <div className="system-area__flow">
-        <div className="system-area__stage system-area__stage--current"><span>Сейчас</span><p>{area.currentState}</p></div>
-        <div className="system-area__stage system-area__stage--implementation"><span>Что внедряем</span><p>{area.implementation}</p></div>
-        <div className="system-area__stage system-area__stage--result"><span>Результат</span><p>{area.result}</p></div>
-      </div>
-      <div className="system-area__tools" aria-label={`Инструменты: ${area.title}`}>
-        {area.tools.map((tool) => <span className="system-area__tool" key={tool}>{tool}</span>)}
+    </article>
+  )
+}
+
+function ProcessStepRow({ step }: { step: (typeof processSteps)[number] }) {
+  return (
+    <article className="process-step">
+      <details className="process-step-mobile">
+        <summary>
+          <span className="process-step__number">{step.number}</span>
+          <span>{step.title}</span>
+          <ChevronDown aria-hidden="true" />
+        </summary>
+        <div className="process-step-mobile__body">
+          <p>{step.action}</p>
+          <strong>{step.result}</strong>
+          <div className="process-artifact"><img src={step.image} alt="" loading="lazy" /><span>{step.artifact}</span></div>
+        </div>
+      </details>
+      <div className="process-step-desktop">
+        <span className="process-step__number">{step.number}</span>
+        <div className="process-step__copy"><h3>{step.title}</h3><p>{step.action}</p><strong>{step.result}</strong></div>
+        <div className="process-artifact"><img src={step.image} alt="" loading="lazy" /><span>{step.artifact}</span></div>
       </div>
     </article>
   )
@@ -275,11 +359,14 @@ function App() {
 
         <section className="statement-section">
           <div className="content-shell statement-layout">
-            <h2>Автошкола может расти в выручке и одновременно <span>терять прибыль, контроль и время собственника</span></h2>
+            <h2>
+              <span className="desktop-copy copy-switch copy-block">Автошкола может расти в выручке и одновременно <span className="accent-copy">терять прибыль, контроль и время собственника</span></span>
+              <span className="mobile-copy copy-switch copy-block">Где теряется <span className="accent-copy">прибыль, контроль и время</span></span>
+            </h2>
             <div className="statement-points">
               {problems.map((problem, index) => (
                 <div className={index === 1 ? 'statement-point is-accented' : 'statement-point'} key={problem}>
-                  <span>0{index + 1}</span><p>{problem}</p>
+                  <span>0{index + 1}</span><p><span className="desktop-copy">{problem}</span><span className="mobile-copy">{mobileProblems[index] ?? problem}</span></p>
                 </div>
               ))}
               <button className="text-button section-cta" type="button" onClick={() => openQuiz('statement')}>Разобрать текущую ситуацию <ArrowRight aria-hidden="true" /></button>
@@ -290,18 +377,21 @@ function App() {
         <section className="audience-section section-padding" aria-labelledby="audience-title">
           <div className="content-shell">
             <div className="section-heading section-heading--stack">
-              <h2 id="audience-title">Три ситуации.<br />Одна задача — <span>управляемый бизнес</span></h2>
-              <p>Мы начинаем не с готового пакета, а с того, где находится автошкола сейчас и какую систему нужно построить.</p>
+              <h2 id="audience-title">
+                <span className="desktop-copy copy-switch copy-block">Три ситуации.<br />Одна задача — <span className="accent-copy">управляемый бизнес</span></span>
+                <span className="mobile-copy copy-switch copy-block">Три ситуации.<br /><span className="accent-copy">Одна задача — управляемость</span></span>
+              </h2>
+              <p><span className="desktop-copy">Мы начинаем не с готового пакета, а с того, где находится автошкола сейчас и какую систему нужно построить.</span><span className="mobile-copy">Начинаем с текущей ситуации и подбираем систему, которую нужно построить.</span></p>
             </div>
             <div className="audience-paths">
               {audiencePaths.map((path) => (
                 <article className={`audience-path audience-path--${path.id}`} key={path.id}>
                   <span className="audience-path__number">{path.number}</span>
                   <div>
-                    <h3>{path.title}</h3>
-                    <p>{path.description}</p>
+                    <h3><span className="desktop-copy">{path.title}</span><span className="mobile-copy">{mobileAudiencePaths[path.id].title}</span></h3>
+                    <p><span className="desktop-copy">{path.description}</span><span className="mobile-copy">{mobileAudiencePaths[path.id].description}</span></p>
                   </div>
-                  <strong>{path.result}</strong>
+                  <strong><span className="desktop-copy">{path.result}</span><span className="mobile-copy">{mobileAudiencePaths[path.id].result}</span></strong>
                   <button type="button" className="round-link" onClick={() => openQuiz(`audience-${path.id}`, scenarioStatusByPath[path.id])} aria-label={`Пройти диагностику: ${path.title}`}><ArrowRight aria-hidden="true" /></button>
                 </article>
               ))}
@@ -395,13 +485,7 @@ function App() {
               <button className="text-button" type="button" onClick={() => openQuiz('process')}>Пройти диагностику <ArrowRight aria-hidden="true" /></button>
             </div>
             <div className="process-steps">
-              {processSteps.map((step) => (
-                <article className="process-step" key={step.number}>
-                  <span className="process-step__number">{step.number}</span>
-                  <div className="process-step__copy"><h3>{step.title}</h3><p>{step.action}</p><strong>{step.result}</strong></div>
-                  <div className="process-artifact"><img src={step.image} alt="" loading="lazy" /><span>{step.artifact}</span></div>
-                </article>
-              ))}
+              {processSteps.map((step) => <ProcessStepRow key={step.number} step={step} />)}
             </div>
           </div>
         </section>
@@ -411,11 +495,11 @@ function App() {
             <div>
               <p className="brand-kicker brand-kicker--light">Результат внедрения</p>
               <h2 id="deliverables-title">Система остаётся внутри вашей компании</h2>
-              <p>Не презентация и не зависимость от внешнего консультанта, а рабочий комплект управления для владельца и команды.</p>
-              <button className="button button--light deliverables-cta" type="button" onClick={() => openQuiz('deliverables')}>Понять, что нужно вашей автошколе <ArrowRight aria-hidden="true" /></button>
+              <p><span className="desktop-copy">Не презентация и не зависимость от внешнего консультанта, а рабочий комплект управления для владельца и команды.</span><span className="mobile-copy">Не презентация, а рабочий комплект управления для владельца и команды.</span></p>
+              <button className="button button--light deliverables-cta" type="button" onClick={() => openQuiz('deliverables')}><span className="desktop-copy">Понять, что нужно вашей автошколе</span><span className="mobile-copy">Понять следующий шаг</span> <ArrowRight aria-hidden="true" /></button>
             </div>
             <div className="deliverables-list">
-              {deliverables.map((item) => <div key={item}><Check aria-hidden="true" /><span>{item}</span></div>)}
+              {deliverables.map((item, index) => <div key={item}><Check aria-hidden="true" /><span><span className="desktop-copy">{item}</span><span className="mobile-copy">{mobileDeliverables[index] ?? item}</span></span></div>)}
             </div>
           </div>
           <div className="deliverables-line" aria-hidden="true"><i /><i /><i /></div>
@@ -449,9 +533,9 @@ function App() {
             <div className="founders-copy">
               <p className="brand-kicker">Команда АСО</p>
               <h2 id="founders-title">За системой стоят конкретные люди</h2>
-              <p>Команда, которая работает над системой управления для автошкол.</p>
-              <div className="founders-principle"><span>Принцип</span><strong>Система должна работать внутри бизнеса, а не существовать только в презентации.</strong></div>
-              <button className="button button--primary founders-cta" type="button" onClick={() => openQuiz('team')}>Оставить заявку команде <ArrowRight aria-hidden="true" /></button>
+              <p><span className="desktop-copy">Команда, которая работает над системой управления для автошкол.</span><span className="mobile-copy">Команда, которая внедряет систему управления автошколой.</span></p>
+              <div className="founders-principle"><span>Принцип</span><strong><span className="desktop-copy">Система должна работать внутри бизнеса, а не существовать только в презентации.</span><span className="mobile-copy">Система работает внутри бизнеса, а не только в презентации.</span></strong></div>
+              <button className="button button--primary founders-cta" type="button" onClick={() => openQuiz('team')}><span className="desktop-copy">Оставить заявку команде</span><span className="mobile-copy">Оставить заявку</span> <ArrowRight aria-hidden="true" /></button>
             </div>
             <div className="founders-visual founders-visual--team">
               <figure className="founder-team">
@@ -465,10 +549,10 @@ function App() {
           <div className="content-shell">
             <div className="section-heading section-heading--split objections-heading">
               <h2 id="objections-title">Вопросы, которые стоит задать до начала</h2>
-              <div><p>Спокойно разбираем формат, границы ответственности и риски — без давления и обещаний до диагностики.</p><button className="button button--primary" type="button" onClick={() => openQuiz('objections')}>Задать свой вопрос <ArrowRight aria-hidden="true" /></button></div>
+              <div><p><span className="desktop-copy">Спокойно разбираем формат, границы ответственности и риски — без давления и обещаний до диагностики.</span><span className="mobile-copy">Разбираем формат, ответственность и риски до диагностики.</span></p><button className="button button--primary" type="button" onClick={() => openQuiz('objections')}><span className="desktop-copy">Задать свой вопрос</span><span className="mobile-copy">Задать вопрос</span> <ArrowRight aria-hidden="true" /></button></div>
             </div>
             <div className="objections-list">
-              {objections.map((item, index) => <article key={item.title}><span>0{index + 1}</span><h3>{item.title}</h3><p>{item.text}</p></article>)}
+              {objections.map((item, index) => <article key={item.title}><span>0{index + 1}</span><h3>{item.title}</h3><p><span className="desktop-copy">{item.text}</span><span className="mobile-copy">{mobileObjectionTexts[index] ?? item.text}</span></p></article>)}
             </div>
           </div>
         </section>
@@ -517,7 +601,7 @@ function App() {
 
       <footer className="site-footer">
         <div className="content-shell footer-layout">
-          <div><BrandLogo inverse /><p>Система создания и развития автошкол.</p></div>
+          <div><BrandLogo inverse /><p>Ассоциация современного образования автошкол России.</p></div>
           <div className="footer-nav">{navItems.slice(0, 4).map((item) => <a key={item.href} href={item.href}>{item.label}</a>)}</div>
           <div className="footer-messengers"><MessengerButton kind="telegram" contacts={CONTACTS} /><MessengerButton kind="whatsapp" contacts={CONTACTS} /></div>
           {import.meta.env.DEV ? <div className="footer-legal"><span>Юридические данные не заполнены</span><span>Политика обработки данных — TODO</span></div> : null}
