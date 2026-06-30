@@ -34,6 +34,8 @@ jobs:
 
       - name: Build website
         run: npm run build
+        env:
+          VITE_LEADS_WEBHOOK_URL: ${{ secrets.VITE_LEADS_WEBHOOK_URL }}
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
