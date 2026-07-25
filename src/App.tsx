@@ -22,6 +22,7 @@ import { LeadForm } from './components/LeadForm'
 import { QuizDialog } from './components/QuizDialog'
 import {
   CONTACTS,
+  casePreviews,
   evidenceItems,
   faqItems,
   processSteps,
@@ -556,6 +557,37 @@ function App() {
             <div className="section-action section-action--compact">
               <button className="text-button" type="button" onClick={() => openQuiz('evidence')}>Обсудить формат материалов <ArrowRight aria-hidden="true" /></button>
             </div>
+          </div>
+        </section>
+
+        <section className="cases-section section-padding" aria-labelledby="cases-title">
+          <div className="content-shell">
+            <div className="section-heading section-heading--split cases-heading">
+              <div>
+                <p className="brand-kicker">Кейсы</p>
+                <h2 id="cases-title">Обезличенные разборы по реальным задачам автошкол</h2>
+              </div>
+              <div className="cases-heading__side">
+                <p>Показываем логику работы без названий, финансовых показателей и внутренних данных. В кейсе остаётся только задача, связка процессов и формат материалов.</p>
+                <button className="button button--primary" type="button" onClick={() => openQuiz('cases')}>Разобрать свою ситуацию <ArrowRight aria-hidden="true" /></button>
+              </div>
+            </div>
+            <div className="case-grid">
+              {casePreviews.map((item) => (
+                <article className="case-card" key={item.number}>
+                  <div className="case-card__top">
+                    <span>{item.number}</span>
+                    <strong>{item.scenario}</strong>
+                  </div>
+                  <h3>{item.title}</h3>
+                  <p>{item.description}</p>
+                  <div className="case-card__materials" aria-label="Материалы кейса">
+                    {item.materials.map((material) => <span key={material}>{material}</span>)}
+                  </div>
+                </article>
+              ))}
+            </div>
+            <p className="case-note"><ShieldCheck aria-hidden="true" /> Публично не раскрываем клиентов, цифры и документы без отдельного согласования.</p>
           </div>
         </section>
 

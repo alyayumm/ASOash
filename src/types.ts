@@ -33,6 +33,14 @@ export type EvidenceItem = {
   kind: 'report' | 'crm' | 'process' | 'document'
 }
 
+export type CasePreview = {
+  number: string
+  scenario: string
+  title: string
+  description: string
+  materials: string[]
+}
+
 export type FaqItem = {
   question: string
   answer: string
