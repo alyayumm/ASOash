@@ -34,11 +34,15 @@ export type EvidenceItem = {
 }
 
 export type CasePreview = {
+  id: 'control' | 'launch' | 'management'
   number: string
-  scenario: string
+  category: string
   title: string
-  description: string
+  before: string
+  implementation: string
+  result: string
   materials: string[]
+  visualType: 'control' | 'launch' | 'management'
 }
 
 export type FaqItem = {
