@@ -417,8 +417,8 @@ function App() {
           <div className="hero-glow hero-glow--red" aria-hidden="true" />
           <div className="hero-copy">
             <h1 id="hero-title">
-              <span className="hero-title-line">Запуск и развитие</span>
-              <span className="hero-title-line">автошкол <em>под ключ</em></span>
+              <span className="hero-title-line">Управляющая компания</span>
+              <span className="hero-title-line">для автошкол</span>
             </h1>
             <p className="hero-promise">Система управления автошколой, которая работает без ручного контроля.</p>
             <p className="hero-lead">Проектируем управленческий контур: маркетинг, продажи, процессы и экономику. Сначала проводим диагностику ситуации, затем показываем, какие решения нужны именно вашей автошколе.</p>
