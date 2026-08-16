@@ -38,6 +38,7 @@ export type CasePreview = {
   number: string
   category: string
   title: string
+  task: string
   before: string
   implementation: string
   result: string

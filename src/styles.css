@@ -1434,6 +1434,15 @@ p {
   letter-spacing: -0.035em;
 }
 
+.case-study__task {
+  margin-top: 18px;
+  max-width: 650px;
+  color: var(--color-text-secondary);
+  font-size: 17px;
+  line-height: 1.52;
+  text-wrap: pretty;
+}
+
 .case-flow {
   margin-top: 30px;
   padding-top: 22px;
@@ -4569,6 +4578,12 @@ section[id],
     margin-top: 12px;
     font-size: clamp(1.65rem, 7.5vw, 2.1rem);
     line-height: 1.05;
+  }
+
+  .case-study__task {
+    margin-top: 10px;
+    font-size: 14px;
+    line-height: 1.35;
   }
 
   .case-study__visual {

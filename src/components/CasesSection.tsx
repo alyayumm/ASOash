@@ -132,6 +132,7 @@ export function CasesSection() {
           <div className="case-study__intro">
             <div className="case-study__meta"><span>{activeCase.number}</span><i />{activeCase.category}</div>
             <h3>{activeCase.title}</h3>
+            <p className="case-study__task">{activeCase.task}</p>
           </div>
 
           <div className="case-study__visual">
