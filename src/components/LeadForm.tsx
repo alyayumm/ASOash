@@ -20,6 +20,7 @@ const createInitialValues = (): LeadFormValues => ({
 const statusLabels: Record<string, string> = {
   active: 'Есть действующая автошкола',
   launch: 'Планирую запуск',
+  franchise: 'Хочу франшизу АСО',
   system: 'Ищу готовую систему',
 }
 
@@ -193,6 +194,7 @@ export function LeadForm() {
             <option value="">Выберите вариант</option>
             <option value="active">Есть действующая автошкола</option>
             <option value="launch">Планирую запуск</option>
+            <option value="franchise">Хочу франшизу АСО</option>
             <option value="system">Ищу готовую систему</option>
           </select>
           {errors.status ? (
