@@ -9,6 +9,16 @@ const caseStages = [
   { key: 'result', label: 'Что получил собственник' },
 ] as const
 
+const quizStatusByCase: Record<CasePreview['id'], string> = {
+  control: 'Есть действующая автошкола',
+  launch: 'Планируется запуск',
+  management: 'Нужна готовая система',
+}
+
+type CasesSectionProps = {
+  onOpenQuiz?: (source: string, status?: string) => void
+}
+
 function ControlVisual() {
   return (
     <div className="case-visual case-visual--control" aria-label="Рабочие артефакты: план-факт, CRM-воронка и филиалы">
@@ -106,15 +116,17 @@ function CaseVisual({ type }: { type: CasePreview['visualType'] }) {
   return <ControlVisual />
 }
 
-export function CasesSection() {
+export function CasesSection({ onOpenQuiz }: CasesSectionProps) {
   const [activeId, setActiveId] = useState<CasePreview['id']>('control')
-  const [detailsOpen, setDetailsOpen] = useState(false)
   const activeCase = useMemo(() => casePreviews.find((item) => item.id === activeId) ?? casePreviews[0], [activeId])
   const compactCases = casePreviews.filter((item) => item.id !== activeCase.id)
 
   const selectCase = (id: CasePreview['id']) => {
     setActiveId(id)
-    setDetailsOpen(false)
+  }
+
+  const requestCaseReview = (source: string, status = quizStatusByCase[activeCase.id]) => {
+    onOpenQuiz?.(source, status)
   }
 
   return (
@@ -123,9 +135,9 @@ export function CasesSection() {
         <div className="cases-heading">
           <div>
             <p className="cases-label">Кейсы</p>
-            <h2 id="cases-title">Типовые кейсы автошкол и логика решения</h2>
+            <h2 id="cases-title">Кейсы автошкол и логика решения</h2>
           </div>
-          <p>Сценарии собраны по типовым задачам. Цифры используются как условные ориентиры, а чувствительные данные не раскрываются.</p>
+          <p>Показываем реальные задачи владельцев: управление действующей автошколой, запуск с нуля и возможность стать франчайзи АСО.</p>
         </div>
 
         <article className="case-study" aria-live="polite">
@@ -133,7 +145,7 @@ export function CasesSection() {
             <div className="case-study__meta"><span>{activeCase.number}</span><i />{activeCase.category}</div>
             <h3>{activeCase.title}</h3>
             <p className="case-study__task">{activeCase.task}</p>
-            <div className="case-metrics" aria-label="Условные показатели кейса">
+            <div className="case-metrics" aria-label="Показатели кейса">
               {activeCase.metrics.map((metric) => (
                 <div className="case-metric" key={metric.label}>
                   <strong>{metric.value}</strong>
@@ -164,19 +176,11 @@ export function CasesSection() {
               <button
                 className="case-study__link"
                 type="button"
-                aria-expanded={detailsOpen}
-                aria-controls={`case-details-${activeCase.id}`}
-                onClick={() => setDetailsOpen((value) => !value)}
+                onClick={() => requestCaseReview(`cases-${activeCase.id}`)}
               >
-                Посмотреть разбор <ArrowRight aria-hidden="true" />
+                Обсудить похожую задачу <ArrowRight aria-hidden="true" />
               </button>
             </div>
-
-            {detailsOpen ? (
-              <div className="case-study__details" id={`case-details-${activeCase.id}`}>
-                В полном разборе показываем исходную проблему, логику решения и связку материалов: {activeCase.materials.join(', ')}. Данные клиента остаются обезличенными.
-              </div>
-            ) : null}
           </div>
         </article>
 

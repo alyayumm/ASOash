@@ -560,7 +560,7 @@ function App() {
           </div>
         </section>
 
-        <CasesSection />
+        <CasesSection onOpenQuiz={openQuiz} />
 
         <section id="founders" className="founders-section section-padding" aria-labelledby="founders-title">
           <div className="content-shell founders-layout">
