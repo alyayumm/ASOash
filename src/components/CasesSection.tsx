@@ -4,9 +4,9 @@ import { casePreviews } from '../data'
 import type { CasePreview } from '../types'
 
 const caseStages = [
-  { key: 'before', label: 'Было' },
-  { key: 'implementation', label: 'Внедрили' },
-  { key: 'result', label: 'Результат' },
+  { key: 'before', label: 'Проблема' },
+  { key: 'implementation', label: 'Как решили' },
+  { key: 'result', label: 'Что получил собственник' },
 ] as const
 
 function ControlVisual() {
@@ -123,9 +123,9 @@ export function CasesSection() {
         <div className="cases-heading">
           <div>
             <p className="cases-label">Кейсы</p>
-            <h2 id="cases-title">Реальные задачи автошкол и системы, которые мы внедряем</h2>
+            <h2 id="cases-title">Типовые кейсы автошкол и логика решения</h2>
           </div>
-          <p>Реальные проекты. Названия и чувствительные данные обезличены.</p>
+          <p>Сценарии собраны по типовым задачам. Цифры используются как условные ориентиры, а чувствительные данные не раскрываются.</p>
         </div>
 
         <article className="case-study" aria-live="polite">
@@ -133,6 +133,14 @@ export function CasesSection() {
             <div className="case-study__meta"><span>{activeCase.number}</span><i />{activeCase.category}</div>
             <h3>{activeCase.title}</h3>
             <p className="case-study__task">{activeCase.task}</p>
+            <div className="case-metrics" aria-label="Условные показатели кейса">
+              {activeCase.metrics.map((metric) => (
+                <div className="case-metric" key={metric.label}>
+                  <strong>{metric.value}</strong>
+                  <span>{metric.label}</span>
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="case-study__visual">
@@ -166,7 +174,7 @@ export function CasesSection() {
 
             {detailsOpen ? (
               <div className="case-study__details" id={`case-details-${activeCase.id}`}>
-                В полном разборе показываем связку материалов: {activeCase.materials.join(', ')}. Данные клиента остаются обезличенными.
+                В полном разборе показываем исходную проблему, логику решения и связку материалов: {activeCase.materials.join(', ')}. Данные клиента остаются обезличенными.
               </div>
             ) : null}
           </div>

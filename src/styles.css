@@ -1443,6 +1443,38 @@ p {
   text-wrap: pretty;
 }
 
+.case-metrics {
+  margin-top: 22px;
+  max-width: 650px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.case-metric {
+  min-height: 82px;
+  padding: 14px 15px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, rgba(30, 99, 233, 0.1), rgba(255, 255, 255, 0.9));
+}
+
+.case-metric strong {
+  display: block;
+  color: var(--color-brand-red);
+  font-family: 'Exo 2', sans-serif;
+  font-size: clamp(1.45rem, 2.2vw, 2rem);
+  line-height: 1;
+}
+
+.case-metric span {
+  display: block;
+  margin-top: 7px;
+  color: #42516a;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
 .case-flow {
   margin-top: 30px;
   padding-top: 22px;
@@ -4584,6 +4616,26 @@ section[id],
     margin-top: 10px;
     font-size: 14px;
     line-height: 1.35;
+  }
+
+  .case-metrics {
+    margin-top: 12px;
+    gap: 7px;
+  }
+
+  .case-metric {
+    min-height: 64px;
+    padding: 9px 8px;
+  }
+
+  .case-metric strong {
+    font-size: 20px;
+  }
+
+  .case-metric span {
+    margin-top: 5px;
+    font-size: 10px;
+    line-height: 1.2;
   }
 
   .case-study__visual {

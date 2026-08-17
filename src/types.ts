@@ -39,6 +39,10 @@ export type CasePreview = {
   category: string
   title: string
   task: string
+  metrics: {
+    value: string
+    label: string
+  }[]
   before: string
   implementation: string
   result: string
