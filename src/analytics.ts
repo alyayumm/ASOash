@@ -1,4 +1,9 @@
 export type AnalyticsEvent =
+  | 'corporate_cta_click'
+  | 'corporate_audience_select'
+  | 'corporate_form_start'
+  | 'corporate_form_submit_success'
+  | 'corporate_form_submit_error'
   | 'cta_click'
   | 'lead_submit'
   | 'lead_submit_error'

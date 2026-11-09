@@ -27,7 +27,7 @@ export const getLeadSubmitErrorMessage = (error: unknown) => {
   return 'Не удалось отправить заявку. Проверьте соединение и попробуйте ещё раз.'
 }
 
-export async function sendLead(payload: LeadPayload) {
+export async function sendLead(payload: LeadPayload, { requireConfirmation = false }: { requireConfirmation?: boolean } = {}) {
   const webhookUrl = getWebhookUrl()
 
   if (!webhookUrl) {
@@ -49,15 +49,22 @@ export async function sendLead(payload: LeadPayload) {
   })
 
   try {
-    await fetch(webhookUrl, {
+    const response = await fetch(webhookUrl, {
       method: 'POST',
-      mode: 'no-cors',
+      mode: requireConfirmation ? 'cors' : 'no-cors',
       headers: {
         'Content-Type': 'text/plain;charset=UTF-8',
       },
       body,
       signal: controller.signal,
     })
+    if (requireConfirmation) {
+      if (!response.ok) throw new Error('Lead delivery failed')
+      const result: unknown = await response.json()
+      if (typeof result !== 'object' || result === null || !('ok' in result) || result.ok !== true) {
+        throw new Error('Lead delivery was not confirmed')
+      }
+    }
   } finally {
     window.clearTimeout(timeout)
   }

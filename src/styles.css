@@ -26,6 +26,14 @@
   text-rendering: optimizeLegibility;
 }
 
+.corporate-service-link { display: flex; justify-content: space-between; align-items: center; gap: 28px; margin-top: 40px; padding: 32px; background: #e8f1fd; border-radius: 16px; }
+.corporate-service-link > div { max-width: 65ch; }
+.corporate-service-link p { color: #536174; font-size: 16px; line-height: 1.6; }
+.corporate-service-link p:first-child { color: #1246aa; font-size: 13px; font-weight: 700; }
+.corporate-service-link h3 { font-size: clamp(26px, 3vw, 34px); line-height: 1.15; margin: 10px 0 14px; }
+.corporate-service-link > a { flex-shrink: 0; }
+@media (max-width: 700px) { .corporate-service-link { align-items: flex-start; flex-direction: column; padding: 24px; } }
+
 * {
   box-sizing: border-box;
 }

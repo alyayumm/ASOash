@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, type CSSProperties } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useState, type CSSProperties } from 'react'
 import {
   ArrowRight,
   Building2,
@@ -29,6 +29,8 @@ import {
   systemAreas,
 } from './data'
 import type { Contacts, SystemArea } from './types'
+
+const CorporateTrainingPage = lazy(() => import('./pages/CorporateTrainingPage'))
 
 const navItems = [
   { href: '#directions', label: 'Направления' },
@@ -399,6 +401,10 @@ function App() {
     return <PersonalDataConsentPage />
   }
 
+  if (new URLSearchParams(window.location.search).get('page') === 'corporate-training') {
+    return <Suspense fallback={<main className="content-shell" aria-busy="true"><p>Загружаем страницу программы…</p></main>}><CorporateTrainingPage /></Suspense>
+  }
+
   return (
     <>
       {import.meta.env.DEV ? <div className="dev-badge">Локальная версия · неподтверждённые данные скрыты</div> : null}
@@ -464,6 +470,10 @@ function App() {
             <div className="section-action">
               <button className="button button--primary" type="button" onClick={() => openQuiz('directions')}>Подобрать направление работы <ArrowRight aria-hidden="true" /></button>
             </div>
+            <aside className="corporate-service-link">
+              <div><p>Для HR-агентств и работодателей</p><h3>Корпоративное обучение вождению</h3><p>Новые возможности для сотрудников и дополнительный инструмент мотивации для бизнеса.</p></div>
+              <a className="button button--primary" href="./?page=corporate-training">О программе <ArrowRight aria-hidden="true" /></a>
+            </aside>
           </div>
         </section>
 
@@ -644,7 +654,7 @@ function App() {
       <footer className="site-footer">
         <div className="content-shell footer-layout">
           <div><BrandLogo inverse /><p>Ассоциация современного образования автошкол России.</p></div>
-          <div className="footer-nav">{navItems.slice(0, 4).map((item) => <a key={item.href} href={item.href}>{item.label}</a>)}</div>
+          <div className="footer-nav">{navItems.slice(0, 4).map((item) => <a key={item.href} href={item.href}>{item.label}</a>)}<a href="./?page=corporate-training">Корпоративное обучение</a></div>
           <div className="footer-messengers"><MessengerButton kind="telegram" contacts={CONTACTS} /><MessengerButton kind="whatsapp" contacts={CONTACTS} /></div>
           <div className="footer-legal">
             <a href="#personal-data-consent">Согласие на обработку персональных данных</a>
