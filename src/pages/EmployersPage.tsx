@@ -99,11 +99,13 @@ export default function EmployersPage() {
         <ul className="employer-facts">{['Особые условия для сотрудников.', 'Готовые материалы для запуска.', 'Менеджер сопровождает участников.'].map(fact => <li key={fact}><Check size={20} aria-hidden="true" />{fact}</li>)}</ul>
       </div></section>
 
-      <section className="employer-section content-shell" id="employer-formats" tabIndex={-1} aria-labelledby="employer-formats-title"><div className="employer-section-heading"><p className="corporate-label">Два формата участия</p><h2 id="employer-formats-title">Выберите, кто оплачивает обучение</h2></div>
-        <div className="employer-payment-tabs" role="tablist" aria-label="Формат оплаты обучения">{modes.map((mode,index) => <button id={`employer-payment-${index}`} key={mode} role="tab" type="button" aria-selected={selection.payment === mode} aria-controls="employer-format-panel" tabIndex={selection.payment === mode ? 0 : -1} onClick={() => choose({ ...selection, payment: mode })} onKeyDown={(e) => tabKeys(e,index,2,(i) => choose({ ...selection, payment: modes[i] }), 'employer-payment')}>
-          <span className="employer-tab-status">{selection.payment === mode ? <><Check size={18} aria-hidden="true" />Выбранный формат</> : 'Выбрать формат →'}</span><strong>{paymentContent[mode].label}</strong><span className="employer-format-summary">{paymentContent[mode].summary}</span>
-        </button>)}</div>
-        <button className="corporate-text-button employer-format-cta" type="button" onClick={() => contact('payment-format')}>{content.formCta}<ArrowRight size={18} aria-hidden="true" /></button>
+      <section className="employer-section employer-formats content-shell" id="employer-formats" tabIndex={-1} aria-labelledby="employer-formats-title">
+        <div className="employer-formats-heading"><h2 id="employer-formats-title">Выберите, кто оплачивает обучение</h2>
+          <div className="employer-payment-tabs" role="tablist" aria-label="Формат оплаты обучения">{modes.map((mode,index) => <button id={`employer-payment-${index}`} key={mode} role="tab" type="button" aria-label={paymentContent[mode].label} aria-selected={selection.payment === mode} aria-controls="employer-format-panel" tabIndex={selection.payment === mode ? 0 : -1} onClick={() => choose({ ...selection, payment: mode })} onKeyDown={(e) => tabKeys(e,index,2,(i) => choose({ ...selection, payment: modes[i] }), 'employer-payment')}>
+            <Check size={16} aria-hidden="true" /><span>{mode === 'employee' ? 'Сотрудник сам' : 'Компания'}</span>
+          </button>)}</div>
+        </div>
+        <div className="employer-format-details"><p className="employer-format-summary" aria-live="polite" aria-atomic="true">{content.summary}</p><button className="corporate-text-button employer-format-cta" type="button" onClick={() => contact('payment-format')}>{content.formCta}<ArrowRight size={18} aria-hidden="true" /></button></div>
       </section>
 
       <div id="employer-format-panel" role="tabpanel" aria-labelledby={`employer-payment-${modes.indexOf(selection.payment)}`}>

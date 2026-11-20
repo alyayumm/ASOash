@@ -31,14 +31,18 @@
 .employer-facts { list-style: none; padding: 28px 0; margin: 36px 0 0; display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 24px; border-top: 1px solid #d0dbea; }
 .employer-facts li { display: flex; gap: 10px; align-items: center; font-size: 14px; font-weight: 600; }
 .employer-facts svg { color: var(--hr-blue); flex-shrink: 0; }
-.employer-payment-tabs { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 24px; }
-.employer-payment-tabs > button { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; padding: 24px; border: 2px solid #d5deeb; background: #fff; border-radius: 12px; color: var(--hr-ink); text-align: left; cursor: pointer; }
-.employer-payment-tabs > button[aria-selected='true'] { background: #edf4ff; border-color: var(--hr-blue); }
-.employer-payment-tabs > button:hover { border-color: #6b8fc9; }
-.employer-payment-tabs strong { font: 600 25px/1.25 'Exo 2',sans-serif; }
-.employer-tab-status { display: flex; align-items: center; gap: 6px; min-height: 22px; color: var(--hr-blue); font-size: 13px; font-weight: 700; }
-.employer-format-summary { font-size: 16px; line-height: 1.6; color: #43546b; }
-.employer-format-cta { margin-top: 18px; }
+.employers-page .employer-formats { padding-block: 32px; }
+.employer-formats-heading { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-bottom: 16px; }
+.employers-page .employer-formats-heading h2 { font-size: 28px; text-wrap: pretty; }
+.employer-payment-tabs { display: flex; flex-shrink: 0; gap: 4px; padding: 4px; border-radius: 10px; background: #edf4ff; }
+.employer-payment-tabs > button { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 10px 16px; border: 0; background: transparent; border-radius: 7px; color: var(--hr-blue); font-size: 14px; font-weight: 600; cursor: pointer; }
+.employer-payment-tabs > button > svg { flex-shrink: 0; visibility: hidden; }
+.employer-payment-tabs > button[aria-selected='true'] { background: var(--hr-blue); color: #fff; }
+.employer-payment-tabs > button[aria-selected='true'] > svg { visibility: visible; }
+.employer-payment-tabs > button:hover:not([aria-selected='true']) { background: #dce8fb; }
+.employer-format-details { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.employers-page .employer-format-summary { max-width: 74ch; margin: 0; font-size: 15px; line-height: 1.6; color: #43546b; }
+.employer-format-cta { flex-shrink: 0; margin: 0; }
 .employer-programmes { padding-top: 8px; }
 .employer-city-tabs { display: flex; width: fit-content; gap: 4px; padding: 4px; background: #edf4ff; border-radius: 9px; margin-bottom: 24px; }
 .employer-city-tabs > button { min-height: 44px; padding: 10px 24px; border: 0; border-radius: 6px; background: transparent; color: var(--hr-blue); font-size: 15px; font-weight: 600; cursor: pointer; }
@@ -183,6 +187,8 @@
  .employer-programme-offer { padding-left: 20px; }
 }
 @media (max-width:900px) {
+ .employer-formats-heading { align-items: flex-start; flex-direction: column; gap: 16px; }
+ .employer-format-details { align-items: flex-start; flex-direction: column; gap: 8px; }
  .employer-hero-layout { grid-template-columns: 1fr; }
  .employer-hero-copy { max-width: 730px; }
  .employer-hero-photo img { max-height: 380px; object-position: center 40%; }
@@ -215,10 +221,10 @@
  .employer-hero-photo img { max-height: none; }
  .employer-facts { grid-template-columns: 1fr; gap: 14px; margin-top: 24px; padding-block: 24px; }
  .employer-facts li { align-items: center; }
- .employer-payment-tabs { grid-template-columns: 1fr; gap: 14px; }
- .employer-payment-tabs > button { padding: 20px; gap: 12px; }
- .employer-payment-tabs strong { font-size: 23px; }
- .employer-format-summary { font-size: 15px; }
+ .employers-page .employer-formats { padding-block: 24px; }
+ .employers-page .employer-formats-heading h2 { font-size: 24px; }
+ .employer-payment-tabs { width: 100%; }
+ .employer-payment-tabs > button { flex: 1; padding-inline: 8px; gap: 6px; }
  .employer-programmes { padding-top: 0; }
  .employer-city-tabs { width: 100%; }
  .employer-city-tabs > button { flex: 1; padding: 10px 12px; font-size: 14px; }
