@@ -36,7 +36,7 @@ export function EmployerLaunch({ companyPaid, onRequest }: Props) {
           <article className="employer-announcement" aria-label={companyPaid ? 'Анонс: оплачивает компания' : 'Анонс: сотрудник оплачивает сам'}>
             <div className="employer-chat-sender">HR-команда</div>
             <a className="employer-instruction-preview" href={instructions} target="_blank" rel="noreferrer">
-              <img src={instructions} width={1254} height={1254} loading="lazy" alt={companyPaid ? 'Инструкция по обучению за счёт компании: выбор программы, промокод KOMANDA26, оформление и оплата компанией' : 'Инструкция для сотрудников: выбор программы, промокод KOMANDA26, самостоятельная оплата и получение документов'} />
+              <img src={instructions} width={1254} height={1254} loading="lazy" alt={companyPaid ? 'Инструкция по обучению за счёт компании: выбор программы, промокод KOMANDA26, оформление и оплата компанией' : 'Инструкция для сотрудников: выбор программы, передача промокода KOMANDA26 менеджеру, самостоятельная оплата и получение документов'} />
               <span><strong>Инструкция для сотрудников</strong><span>Открыть изображение<ArrowRight size={16} aria-hidden="true" /></span></span>
             </a>
             <div className="employer-announcement-body">
