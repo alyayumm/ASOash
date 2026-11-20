@@ -1,4 +1,4 @@
-import { ArrowRight, Check, CheckCheck, FileText, GraduationCap, Link, Megaphone, Ticket, Users } from 'lucide-react'
+import { ArrowRight, Check, CheckCheck, ChevronDown, FileText, GraduationCap, Link, Megaphone, Ticket, Users } from 'lucide-react'
 import launchImage from '../assets/hr-programme-launch.webp'
 import employeeInstructions from '../assets/hr-employee-offer-instructions.png'
 
@@ -35,19 +35,21 @@ export function EmployerLaunch({ companyPaid, onRequest }: Props) {
             <div className="employer-chat-sender">HR-команда</div>
             {!companyPaid ? <a className="employer-instruction-preview" href={employeeInstructions} target="_blank" rel="noreferrer">
               <img src={employeeInstructions} width={1254} height={1254} loading="lazy" alt="Инструкция для сотрудников: выбор программы, промокод KOMANDA26, самостоятельная оплата и получение документов" />
-              <span>Открыть инструкцию<ArrowRight size={16} aria-hidden="true" /></span>
+              <span><strong>Инструкция для сотрудников</strong><span>Открыть изображение<ArrowRight size={16} aria-hidden="true" /></span></span>
             </a> : null}
             <div className="employer-announcement-body">
         <strong>Обучение вождению для нашей команды</strong>
-        {companyPaid ? <>
-          <p>Коллеги, для нашей команды доступна программа обучения вождению за счёт компании.</p>
-          <p>Обучение проходит в Москве и Санкт-Петербурге. Доступны категории <strong>B — механика или автомат</strong> и <strong>A — мотоцикл</strong>.</p>
-          <p>Порядок участия — по корпоративной ссылке. При обращении к менеджеру назовите промокод <strong>{examplePromoCode}</strong>. Менеджер поможет с оформлением и началом обучения.</p>
-        </> : <>
-          <p>Коллеги, мы договорились о специальных условиях обучения в автошколе для сотрудников нашей компании.</p>
-          <p>Программа доступна в Москве и Санкт-Петербурге. Можно пройти обучение на категорию <strong>B — механика или автомат</strong>, либо <strong>A — мотоцикл</strong>. Теория проходит онлайн, практика — с инструктором.</p>
-          <p>Условия, программы и порядок оформления собраны по корпоративной ссылке. С выбором программы и документами поможет менеджер автошколы — к нему можно обращаться напрямую.</p>
-        </>}
+              <p>{companyPaid ? 'Коллеги, для нашей команды доступна программа обучения вождению за счёт компании.' : 'Коллеги, мы договорились о специальных условиях обучения в автошколе для сотрудников нашей компании.'}</p>
+              <details className="employer-announcement-more" key={companyPaid ? 'company' : 'employee'}>
+                <summary><span className="employer-announcement-expand">Показать целиком</span><span className="employer-announcement-collapse">Свернуть</span><ChevronDown size={16} aria-hidden="true" /></summary>
+                {companyPaid ? <>
+                  <p>Обучение проходит в Москве и Санкт-Петербурге. Доступны категории <strong>B — механика или автомат</strong> и <strong>A — мотоцикл</strong>.</p>
+                  <p>Порядок участия — по корпоративной ссылке. При обращении к менеджеру назовите промокод <strong>{examplePromoCode}</strong>. Менеджер поможет с оформлением и началом обучения.</p>
+                </> : <>
+                  <p>Программа доступна в Москве и Санкт-Петербурге. Можно пройти обучение на категорию <strong>B — механика или автомат</strong>, либо <strong>A — мотоцикл</strong>. Теория проходит онлайн, практика — с инструктором.</p>
+                  <p>Условия, программы и порядок оформления собраны по корпоративной ссылке. С выбором программы и документами поможет менеджер автошколы — к нему можно обращаться напрямую.</p>
+                </>}
+              </details>
               <div className="employer-announcement-code"><span>Промокод:</span><strong>{examplePromoCode}</strong></div>
               <div className="employer-chat-time" aria-label="Время отправки в примере: 10:00">10:00<CheckCheck size={16} aria-hidden="true" /></div>
             </div>
