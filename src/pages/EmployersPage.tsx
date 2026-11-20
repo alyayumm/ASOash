@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
-import { ArrowLeft, ArrowRight, Check, FileText, ChevronDown, Menu, X, Handshake } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check, FileText, ChevronDown, Menu, X, Handshake, Phone, Mail } from 'lucide-react'
 import { BrandLogo } from '../components/BrandLogo'
 import { trackEvent } from '../analytics'
 import employeeHero from '../assets/hr-driver-practice.webp'
@@ -7,9 +7,10 @@ import companyHero from '../assets/hr-hero-company.webp'
 import remoteCall from '../assets/hr-remote-call.webp'
 import managerSupport from '../assets/hr-manager-support.webp'
 import { EmployerLaunch } from './EmployerLaunch'
+import { EmployerEmployeeJourney } from './EmployerEmployeeJourney'
 import { EmployerProgrammes } from './EmployerProgrammes'
 import { EmployersLeadForm } from './EmployersLeadForm'
-import { employeeSteps, employerFaq, paymentContent } from './employersData'
+import { employerFaq, paymentContent } from './employersData'
 import { employeeEnrollmentUrl, employerSelectionUrl, getEmployerAttribution, readEmployerSelection, type EmployerPayment, type EmployerSelection } from './employersState'
 import './corporateTraining.css'
 import './employers.css'
@@ -108,11 +109,11 @@ export default function EmployersPage() {
       <div id="employer-format-panel" role="tabpanel" aria-labelledby={`employer-payment-${modes.indexOf(selection.payment)}`}>
         <EmployerProgrammes onRequest={(city, topic) => { setLeadCity(city); contact('programme', topic) }} />
         <EmployerLaunch companyPaid={companyPaid} onRequest={() => contact('programme-launch')} />
-        <section className="employer-section content-shell employer-journey" id="employer-process" tabIndex={-1} aria-labelledby="employer-process-title">
+        {!companyPaid ? <EmployerEmployeeJourney enrollmentLink={enrollmentLink} /> : <section className="employer-section content-shell employer-journey" id="employer-process" tabIndex={-1} aria-labelledby="employer-process-title">
           <div className="employer-section-heading"><p className="corporate-label">Оформление и поддержка</p><h2 id="employer-process-title">Как сотрудники воспользуются программой</h2></div>
-          {!companyPaid ? <ol className="employer-employee-steps">{employeeSteps.map((step, index) => <li key={step.title}><span className="employer-employee-number">0{index + 1}</span><h3>{step.title}</h3><p>{step.text}</p></li>)}</ol> : <p className="employer-company-journey">После оплаты счёта компанией менеджер свяжется с участниками, поможет с оформлением и направит документы и инструкции по началу обучения.</p>}
-          <div className="employer-journey-support"><img src={managerSupport} width={1448} height={1086} loading="lazy" alt="Наш менеджер в гарнитуре за ноутбуком" /><div><h3>Дальше сотрудник общается с нашим менеджером напрямую</h3><p>По вопросам оформления, документов и начала обучения.</p>{!companyPaid && enrollmentLink ? <a className="corporate-text-button" href={enrollmentLink} target="_blank" rel="noreferrer" onClick={() => trackEvent('employee_offer_open', { source: 'employee-roadmap' })}>Открыть предложение для сотрудника<ArrowRight size={18} aria-hidden="true" /></a> : null}</div></div>
-        </section>
+          <p className="employer-company-journey">После оплаты счёта компанией менеджер свяжется с участниками, поможет с оформлением и направит документы и инструкции по началу обучения.</p>
+          <div className="employer-journey-support"><img src={managerSupport} width={1448} height={1086} loading="lazy" alt="Наш менеджер в гарнитуре за ноутбуком" /><div><h3>Дальше сотрудник общается с нашим менеджером напрямую</h3><p>По вопросам оформления, документов и начала обучения.</p></div></div>
+        </section>}
       </div>
 
       <section className="employer-section employer-online"><div className="content-shell employer-online-layout"><div><p className="corporate-label">Для команды из разных офисов</p><h2>Расскажем команде об обучении онлайн</h2><p>Объясним условия программы и порядок оформления, ответим на вопросы сотрудников. Подключиться смогут коллеги из разных офисов и те, кто работает удалённо. Возможность и формат встречи согласуем с вами.</p></div><img src={remoteCall} width={1672} height={941} loading="lazy" alt="Онлайн-встреча команды из разных офисов" /></div></section>
@@ -123,7 +124,12 @@ export default function EmployersPage() {
 
       <section className="corporate-faq employer-section" id="employer-faq" tabIndex={-1} aria-labelledby="employer-faq-title"><div className="content-shell corporate-faq__layout"><div><p className="corporate-label">Перед запуском</p><h2 id="employer-faq-title">Ответы для HR</h2></div><div>{employerFaq.map(item => <details key={item.question}><summary>{item.question}<ChevronDown size={20} aria-hidden="true" /></summary><p>{item.answer}</p></details>)}</div></div></section>
 
-      <section className="employer-section content-shell employer-contact" id="employer-contact" tabIndex={-1} aria-labelledby="employer-contact-title"><div><p className="corporate-label">{content.label}</p><h2 id="employer-contact-title">Получите условия для вашей компании</h2><p>Уточним города, категории и формат оплаты, затем подготовим предложение для вашей команды.</p><a className="corporate-back" href="./"><ArrowLeft size={18} aria-hidden="true" />На главную</a></div><div className="employer-contact-form"><EmployersLeadForm selection={selection} source={source} city={leadCity} requestTopic={requestTopic} onCityChange={setLeadCity} onTaxChange={tax => choose({ ...selection, tax })} /></div></section>
+      <section className="employer-section content-shell employer-contact" id="employer-contact" tabIndex={-1} aria-labelledby="employer-contact-title"><div><p className="corporate-label">{content.label}</p><h2 id="employer-contact-title">Получите условия для вашей компании</h2><p>Уточним города, категории и формат оплаты, затем подготовим предложение для вашей команды.</p>
+        <address className="employer-direct-contacts" aria-label="Связаться с нами напрямую">
+          <a href="tel:+79990082719"><Phone size={22} aria-hidden="true" /><span><small>Телефон</small><strong>+7 999 008-27-19</strong></span></a>
+          <a href="mailto:aso-autoschool@yandex.ru"><Mail size={22} aria-hidden="true" /><span><small>Электронная почта</small><strong>aso-autoschool@yandex.ru</strong></span></a>
+        </address>
+        <a className="corporate-back" href="./"><ArrowLeft size={18} aria-hidden="true" />На главную</a></div><div className="employer-contact-form"><EmployersLeadForm selection={selection} source={source} city={leadCity} requestTopic={requestTopic} onCityChange={setLeadCity} onTaxChange={tax => choose({ ...selection, tax })} /></div></section>
     </main>
     <footer className="corporate-footer"><div className="content-shell"><a href="./" aria-label="АСО Автошкол — на главную"><BrandLogo inverse /></a><p>Корпоративная программа для работодателей</p><a href="./#personal-data-consent" target="_blank" rel="noreferrer">Обработка персональных данных</a></div></footer>
   </div>

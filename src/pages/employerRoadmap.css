@@ -1,0 +1,84 @@
+.employer-process { --roadmap-blue: #1e63e9; background: #f3f7ff; }
+.employer-roadmap-heading { display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: 28px; }
+.employer-roadmap-heading .brand-logo { width: 156px; }
+.employer-roadmap-heading > span:not(.brand-logo) { padding: 10px 24px; border-radius: 24px; background: #e3edff; color: var(--hr-blue); font-size: 13px; font-weight: 700; }
+.employer-process .employer-section-heading { max-width: 1000px; margin-bottom: 36px; }
+.employer-roadmap { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 32px; list-style: none; margin: 0; padding: 0; }
+.employer-roadmap > li { position: relative; min-width: 0; }
+.employer-roadmap-node { position: relative; display: flex; justify-content: center; margin-bottom: 12px; }
+.employer-roadmap-node::before { content: ''; position: absolute; height: 6px; top: 25px; left: 50%; right: calc(-50% - 32px); background: #b9d0fb; }
+.employer-roadmap-node::after { content: ''; position: absolute; top: 21px; left: calc(100% + 10px); width: 12px; height: 12px; border-top: 3px solid var(--roadmap-blue); border-right: 3px solid var(--roadmap-blue); transform: rotate(45deg); }
+.employer-roadmap > li:last-child .employer-roadmap-node::before,.employer-roadmap > li:last-child .employer-roadmap-node::after { display: none; }
+.employer-roadmap-node > span { position: relative; display: grid; place-items: center; width: 56px; height: 56px; border-radius: 50%; background: var(--roadmap-blue); color: #fff; font: 700 23px/1 'Exo 2',sans-serif; }
+.employer-roadmap > li:nth-child(2) .employer-roadmap-node > span { background: #e21b1b; }
+.employer-step-card { height: calc(100% - 68px); background: #fff; border: 1px solid #d0dff6; border-radius: 22px; box-shadow: 0 12px 28px #1b407008; }
+.employer-step-copy { padding: 4px 24px 28px; }
+.employers-page .employer-step-copy h3 { font-size: 26px; line-height: 1.25; min-height: 2.5em; margin-bottom: 14px; }
+.employers-page .employer-step-copy p { font-size: 16px; }
+.employer-roadmap-visual { height: 272px; padding: 28px 24px 20px; display: flex; align-items: center; justify-content: center; }
+.employer-roadmap-phone { position: relative; width: 176px; flex-shrink: 0; border: 8px solid #101722; border-radius: 28px; background: #fff; padding: 28px 12px 14px; display: flex; flex-direction: column; align-items: stretch; gap: 10px; }
+.employer-roadmap-phone::before { content: ''; position: absolute; top: 7px; left: 50%; transform: translateX(-50%); width: 48px; height: 6px; background: #101722; border-radius: 6px; }
+.employer-roadmap-phone .brand-logo { width: 120px; margin: 0 auto 4px; }
+.employer-roadmap-phone > strong { font-size: 16px; text-align: center; }
+.employer-roadmap-promo { position: absolute; top: 76px; right: -30px; padding: 12px; background: #e8f1ff; color: var(--hr-blue); border: 1px solid #b9d0fb; border-radius: 12px; font-size: 12px; font-weight: 600; }
+.employer-roadmap-input { padding: 9px 4px; border: 1px solid #d0def5; border-radius: 8px; background: #f2f6fd; color: #536174; font-size: 11px; text-align: center; }
+.employer-roadmap-action { padding: 10px 6px; border-radius: 9px; background: var(--roadmap-blue); color: #fff; font-size: 13px; font-weight: 600; text-align: center; }
+.employer-roadmap-action--red { background: #e21b1b; }
+.employer-roadmap-window { width: 100%; max-width: 280px; border: 2px solid #cfdbef; border-radius: 18px; background: #fff; }
+.employer-roadmap-window-heading { position: relative; padding: 12px 16px; border-radius: 16px 16px 0 0; background: #e8f1ff; color: var(--hr-blue); font-size: 13px; font-weight: 700; }
+.employer-roadmap-window-heading > svg { position: absolute; right: -8px; top: -22px; box-sizing: content-box; padding: 10px; border: 2px solid #cfdbef; border-radius: 14px; background: #fff; color: var(--roadmap-blue); }
+.employer-roadmap-window-body { display: flex; flex-direction: column; gap: 12px; padding: 18px; }
+.employer-roadmap-window-body > strong { color: var(--hr-ink); font: 700 23px/1.2 'Exo 2',sans-serif; }
+.employer-roadmap-window-body > span:not(.employer-roadmap-action) { font-size: 13px; color: #536174; }
+.employer-roadmap-rule { border-top: 1px solid #d4dfed; }
+.employer-roadmap-document { display: flex; align-items: center; gap: 12px; padding: 14px 10px; border-radius: 12px; background: #f2f6fb; }
+.employer-roadmap-document > svg { color: var(--roadmap-blue); flex-shrink: 0; }
+.employer-roadmap-document strong { font-size: 15px; line-height: 1.5; font-weight: 500; }
+.employer-roadmap-messengers { display: flex; gap: 8px; }
+.employer-roadmap-messengers > span { flex: 1; padding: 8px 4px; border-radius: 8px; background: #e8f1ff; color: var(--hr-blue); font-size: 12px; font-weight: 700; text-align: center; }
+.employer-roadmap-messengers > span:last-child { background: #e6f5ee; color: #19764f; }
+.employer-process-result { display: flex; align-items: center; gap: 20px; margin-top: 32px; padding: 24px; border-radius: 18px; background: #e2edff; }
+.employer-process-result > svg { flex-shrink: 0; box-sizing: content-box; padding: 12px; border-radius: 50%; background: #fff; color: var(--roadmap-blue); }
+.employers-page .employer-process-result h3 { color: var(--hr-blue); font-size: 23px; }
+.employers-page .employer-process-result p { margin-top: 6px; font-size: 16px; }
+.employer-roadmap-link { margin-top: 20px; }
+@media (max-width:1000px) {
+ .employer-roadmap { grid-template-columns: 1fr; gap: 24px; }
+ .employer-roadmap > li { padding-left: 72px; }
+ .employer-roadmap-node { position: absolute; left: 0; top: 0; bottom: -24px; margin: 0; }
+ .employer-roadmap-node::before { top: 28px; left: 25px; right: auto; width: 6px; height: auto; bottom: 0; }
+ .employer-roadmap-node::after { top: auto; bottom: 10px; left: 22px; transform: rotate(135deg); }
+ .employer-step-card { height: auto; display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); align-items: center; }
+ .employer-step-copy { padding: 24px; }
+ .employers-page .employer-step-copy h3 { min-height: 0; }
+}
+@media (max-width:700px) {
+ .employer-roadmap-heading { gap: 12px; margin-bottom: 24px; }
+ .employer-roadmap-heading .brand-logo { width: 120px; }
+ .employer-roadmap-heading > span:not(.brand-logo) { padding: 8px 12px; font-size: 11px; }
+ .employer-process .employer-section-heading { margin-bottom: 28px; }
+ .employer-roadmap > li { padding-left: 40px; }
+ .employer-roadmap-node > span { width: 30px; height: 30px; font-size: 14px; }
+ .employer-roadmap-node::before { top: 24px; left: 13px; width: 4px; }
+ .employer-roadmap-node::after { left: 10px; width: 9px; height: 9px; }
+ .employer-step-card { display: block; border-radius: 18px; }
+ .employer-roadmap-visual { height: 260px; padding: 28px 16px 16px; }
+ .employer-step-copy { padding: 4px 20px 24px; }
+ .employers-page .employer-step-copy h3 { font-size: 24px; }
+ .employer-process-result { align-items: flex-start; gap: 12px; padding: 20px 16px; }
+ .employer-process-result > svg { width: 20px; height: 20px; padding: 8px; }
+ .employers-page .employer-process-result h3 { font-size: 20px; }
+ .employers-page .employer-process-result p { font-size: 14px; }
+}
+@media (max-width:360px) {
+ .employer-roadmap-phone { width: 160px; padding-inline: 10px; }
+ .employer-roadmap-phone .brand-logo { width: 110px; }
+ .employer-roadmap-promo { right: -28px; padding: 8px; font-size: 10px; }
+ .employer-roadmap-window-heading { padding-inline: 10px; font-size: 11px; }
+ .employer-roadmap-window-body { padding: 12px; }
+ .employer-roadmap-document { padding: 12px 6px; gap: 8px; }
+ .employer-roadmap-document strong { font-size: 13px; }
+ .employer-roadmap-document > svg { width: 26px; }
+ .employer-roadmap-messengers { gap: 4px; }
+ .employer-roadmap-messengers > span { font-size: 10px; }
+}
