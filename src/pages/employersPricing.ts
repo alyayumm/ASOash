@@ -20,6 +20,9 @@ const programmes = {
 const rubles = new Intl.NumberFormat('ru-RU', {
   style: 'currency', currency: 'RUB', maximumFractionDigits: 0,
 })
+const percentage = new Intl.NumberFormat('ru-RU', {
+  style: 'percent', minimumFractionDigits: 1, maximumFractionDigits: 1,
+})
 export const formatEmployerPrice = (amount: number) => rubles.format(amount)
 
 export function getEmployerPrice(city: EmployerCity, category: EmployerCategory, transmission: EmployerTransmission) {
@@ -27,5 +30,9 @@ export function getEmployerPrice(city: EmployerCity, category: EmployerCategory,
   const listPrice = category === 'B' && transmission === 'АКПП'
     ? programmes[city].B.automaticListPrice
     : programme.listPrice
-  return { listPrice, price: listPrice - programme.discount, practiceHours: programme.practiceHours }
+  const price = listPrice - programme.discount
+  return {
+    listPrice, price, practiceHours: programme.practiceHours,
+    discountPercent: percentage.format((listPrice - price) / listPrice),
+  }
 }
