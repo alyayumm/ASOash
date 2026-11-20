@@ -12,9 +12,9 @@ export const paymentContent = {
 }
 
 export const taxContent = {
-  osno: { label: 'ОСНО' },
-  usn: { label: 'УСН' },
-  unknown: { label: 'Нужна консультация' },
+  osno: { label: 'ОСНО', title: 'Ваша компания на ОСНО', text: 'Обсудим требования вашей бухгалтерии к НДС, оплате и документам. Конкретные условия согласуем с вами до оплаты.', cta: 'Обсудить с менеджером' },
+  usn: { label: 'УСН', title: 'Ваша компания на УСН', text: 'Уточним реквизиты и согласуем договор, счёт и документы по обучению.', cta: 'Обсудить документы' },
+  unknown: { label: 'Нужна консультация', title: 'Поможем разобраться с документами', text: 'Оставьте контакт — поможем разобраться с порядком оплаты и документами.', cta: 'Обсудить с менеджером' },
 }
 export const employerCities = { moscow: 'Москва', spb: 'Санкт-Петербург' } as const
 export type EmployerCity = keyof typeof employerCities

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
-import { ArrowLeft, ArrowRight, Check, FileText, ChevronDown, Menu, X, Handshake, Phone, Mail } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check, ChevronDown, Menu, X, Handshake, Phone, Mail } from 'lucide-react'
 import { BrandLogo } from '../components/BrandLogo'
 import { trackEvent } from '../analytics'
 import employeeHero from '../assets/hr-driver-practice.webp'
@@ -10,12 +10,13 @@ import { EmployerLaunch } from './EmployerLaunch'
 import { EmployerEmployeeJourney } from './EmployerEmployeeJourney'
 import { EmployerProgrammes } from './EmployerProgrammes'
 import { EmployersLeadForm } from './EmployersLeadForm'
-import { employerFaq, paymentContent } from './employersData'
-import { employeeEnrollmentUrl, employerSelectionUrl, getEmployerAttribution, readEmployerSelection, type EmployerPayment, type EmployerSelection } from './employersState'
+import { employerFaq, paymentContent, taxContent } from './employersData'
+import { employeeEnrollmentUrl, employerSelectionUrl, getEmployerAttribution, readEmployerSelection, type BuyerTaxRegime, type EmployerPayment, type EmployerSelection } from './employersState'
 import './corporateTraining.css'
 import './employers.css'
 
 const modes: EmployerPayment[] = ['employee', 'company']
+const taxModes: BuyerTaxRegime[] = ['osno', 'usn', 'unknown']
 
 export default function EmployersPage() {
   const [selection, setSelection] = useState(() => readEmployerSelection(location.search))
@@ -120,7 +121,18 @@ export default function EmployersPage() {
 
       <section className="employer-section content-shell" id="employer-referral" tabIndex={-1} aria-labelledby="employer-referral-title"><div className="employer-referral"><div><p className="corporate-label"><Handshake size={24} aria-hidden="true" />Реферальная программа</p><h2 id="employer-referral-title">Дополнительная выгода для вашей компании</h2><p>В рамках сотрудничества можно подключить реферальную программу с кешбэком для вашей компании. Менеджер расскажет об условиях участия и начисления.</p></div><button className="button button--primary" type="button" onClick={() => contact('referral', 'Условия реферальной программы')}>Узнать условия кешбэка<ArrowRight size={18} aria-hidden="true" /></button></div></section>
 
-      {companyPaid ? <section className="employer-docs content-shell" id="employer-tax" tabIndex={-1} aria-labelledby="employer-tax-title"><FileText size={36} aria-hidden="true" /><div><h2 id="employer-tax-title">Оплата и документы для компании</h2><p>Согласуем порядок оплаты и документы с учётом требований вашей бухгалтерии.</p><button className="corporate-text-button" type="button" onClick={() => contact('accounting', 'Консультация по НДС, ОСНО и УСН')}>Получить консультацию по НДС, ОСНО и УСН<ArrowRight size={18} aria-hidden="true" /></button></div></section> : null}
+      {companyPaid ? <section className="employer-section employer-docs" id="employer-tax" tabIndex={-1} aria-labelledby="employer-tax-title">
+        <div className="content-shell employer-docs-layout">
+          <div><p className="corporate-label">Оплата и документы</p><h2 id="employer-tax-title">Оплата и документы для компании</h2><p>Уточним требования вашей бухгалтерии и согласуем порядок оплаты и документы.</p></div>
+          <div className="employer-docs-detail">
+            <div className="employer-tax-tabs" role="tablist" aria-label="Налоговый режим покупателя">{taxModes.map((tax, index) => <button key={tax} id={`employer-tax-tab-${index}`} type="button" role="tab" aria-selected={selection.tax === tax} aria-controls="employer-tax-panel" tabIndex={selection.tax === tax ? 0 : -1} onClick={() => choose({ ...selection, tax })} onKeyDown={(event) => tabKeys(event, index, taxModes.length, next => choose({ ...selection, tax: taxModes[next] }), 'employer-tax-tab')}>{taxContent[tax].label}</button>)}</div>
+            <div id="employer-tax-panel" role="tabpanel" aria-labelledby={`employer-tax-tab-${taxModes.indexOf(selection.tax)}`}>
+              <h3>{taxContent[selection.tax].title}</h3><p>{taxContent[selection.tax].text}</p>
+              <button className="corporate-text-button" type="button" onClick={() => contact('accounting', `Оплата и документы · ${taxContent[selection.tax].label}`)}>{taxContent[selection.tax].cta}<ArrowRight size={18} aria-hidden="true" /></button>
+            </div>
+          </div>
+        </div>
+      </section> : null}
 
       <section className="corporate-faq employer-section" id="employer-faq" tabIndex={-1} aria-labelledby="employer-faq-title"><div className="content-shell corporate-faq__layout"><div><p className="corporate-label">Перед запуском</p><h2 id="employer-faq-title">Ответы для HR</h2></div><div>{employerFaq.map(item => <details key={item.question}><summary>{item.question}<ChevronDown size={20} aria-hidden="true" /></summary><p>{item.answer}</p></details>)}</div></div></section>
 
