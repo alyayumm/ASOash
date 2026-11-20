@@ -2,8 +2,7 @@ import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import { ArrowLeft, ArrowRight, Check, ChevronDown, Menu, X, Handshake, Phone, Mail } from 'lucide-react'
 import { BrandLogo } from '../components/BrandLogo'
 import { trackEvent } from '../analytics'
-import employeeHero from '../assets/hr-driver-practice.webp'
-import companyHero from '../assets/hr-hero-company.webp'
+import employerHero from '../assets/hr-hero-company.webp'
 import remoteCall from '../assets/hr-remote-call.webp'
 import managerSupport from '../assets/hr-manager-support.webp'
 import { EmployerLaunch } from './EmployerLaunch'
@@ -92,11 +91,11 @@ export default function EmployersPage() {
       <section className="employer-hero" aria-labelledby="employer-title"><div className="content-shell">
         <div className="employer-hero-layout"><div className="employer-hero-copy">
           <p className="corporate-label">Корпоративная программа · Москва и Санкт-Петербург</p>
-          <h1 id="employer-title">Добавьте обучение вождению <span>в соцпакет для своих сотрудников</span></h1>
+          <h1 id="employer-title">Добавьте обучение вождению <span>в соцпакет</span></h1>
           <p className="employer-hero-subtitle">Предложите команде обучение на особых корпоративных условиях. Компания может оплатить обучение или сотрудники оплатят его самостоятельно.</p>
           <p className="employer-hero-support">Подготовим материалы для запуска, поможем с оформлением и организуем начало обучения.</p>
           <div className="employer-hero-actions"><button className="button button--primary" type="button" onClick={() => contact('hero')}>Получить условия для компании<ArrowRight aria-hidden="true" /></button><button className="corporate-text-button" type="button" onClick={() => scrollTo('employer-launch')}>Как запустить программу<ArrowRight size={18} aria-hidden="true" /></button></div>
-        </div><figure className="employer-hero-photo"><img src={companyPaid ? companyHero : employeeHero} width={1448} height={1086} fetchPriority="high" alt={companyPaid ? 'Сотрудники рядом с учебным автомобилем' : 'Сотрудница за рулём учебного автомобиля'} /></figure></div>
+        </div><figure className="employer-hero-photo"><img src={employerHero} width={1448} height={1086} fetchPriority="high" alt="Сотрудники рядом с учебным автомобилем" /></figure></div>
         <ul className="employer-facts">{['Особые условия для сотрудников.', 'Готовые материалы для запуска.', 'Менеджер сопровождает участников.'].map(fact => <li key={fact}><Check size={20} aria-hidden="true" />{fact}</li>)}</ul>
       </div></section>
 
