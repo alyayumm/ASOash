@@ -6,5 +6,6 @@ interface Window {
 }
 
 interface ImportMetaEnv {
+  readonly VITE_EMPLOYEE_ENROLLMENT_URL?: string
   readonly VITE_LEADS_WEBHOOK_URL?: string
 }

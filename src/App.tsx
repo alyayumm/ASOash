@@ -31,6 +31,7 @@ import {
 import type { Contacts, SystemArea } from './types'
 
 const CorporateTrainingPage = lazy(() => import('./pages/CorporateTrainingPage'))
+const EmployersPage = lazy(() => import('./pages/EmployersPage'))
 
 const navItems = [
   { href: '#directions', label: 'Направления' },
@@ -403,6 +404,10 @@ function App() {
 
   if (new URLSearchParams(window.location.search).get('page') === 'corporate-training') {
     return <Suspense fallback={<main className="content-shell" aria-busy="true"><p>Загружаем страницу программы…</p></main>}><CorporateTrainingPage /></Suspense>
+  }
+
+  if (new URLSearchParams(window.location.search).get('page') === 'employers') {
+    return <Suspense fallback={<main className="content-shell" aria-busy="true"><p>Загружаем программу для работодателей…</p></main>}><EmployersPage /></Suspense>
   }
 
   return (
