@@ -32,15 +32,15 @@
 .employer-facts li { display: flex; gap: 10px; align-items: center; font-size: 14px; font-weight: 600; }
 .employer-facts svg { color: var(--hr-blue); flex-shrink: 0; }
 .employers-page .employer-formats { padding-block: 32px; }
-.employer-formats-heading { display: flex; align-items: center; justify-content: flex-start; gap: 24px; margin-bottom: 16px; }
+.employer-formats-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-start; gap: 24px; margin-bottom: 16px; }
 .employers-page .employer-formats-heading h2 { font-size: 28px; text-wrap: pretty; }
+.employer-format-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; }
 .employer-payment-tabs { display: flex; flex-shrink: 0; gap: 4px; padding: 4px; border-radius: 10px; background: #edf4ff; }
 .employer-payment-tabs > button { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 10px 16px; border: 0; background: transparent; border-radius: 7px; color: var(--hr-blue); font-size: 14px; font-weight: 600; cursor: pointer; }
 .employer-payment-tabs > button > svg { flex-shrink: 0; visibility: hidden; }
 .employer-payment-tabs > button[aria-selected='true'] { background: var(--hr-blue); color: #fff; }
 .employer-payment-tabs > button[aria-selected='true'] > svg { visibility: visible; }
 .employer-payment-tabs > button:hover:not([aria-selected='true']) { background: #dce8fb; }
-.employer-format-details { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 .employers-page .employer-format-summary { max-width: 74ch; margin: 0; font-size: 15px; line-height: 1.6; color: #43546b; }
 .employer-format-cta { flex-shrink: 0; margin: 0; }
 .employer-programmes { padding-top: 8px; }
@@ -188,7 +188,6 @@
 }
 @media (max-width:900px) {
  .employer-formats-heading { align-items: flex-start; flex-direction: column; gap: 16px; }
- .employer-format-details { align-items: flex-start; flex-direction: column; gap: 8px; }
  .employer-hero-layout { grid-template-columns: 1fr; }
  .employer-hero-copy { max-width: 730px; }
  .employer-hero-photo img { max-height: 380px; object-position: center 40%; }
@@ -223,6 +222,7 @@
  .employer-facts li { align-items: center; }
  .employers-page .employer-formats { padding-block: 24px; }
  .employers-page .employer-formats-heading h2 { font-size: 24px; }
+ .employer-format-actions { width: 100%; gap: 8px; }
  .employer-payment-tabs { width: 100%; }
  .employer-payment-tabs > button { flex: 1; padding-inline: 8px; gap: 6px; }
  .employer-programmes { padding-top: 0; }

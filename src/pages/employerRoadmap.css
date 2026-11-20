@@ -1,7 +1,6 @@
 .employer-process { --roadmap-blue: #1e63e9; background: #f3f7ff; }
-.employer-roadmap-heading { display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: 28px; }
-.employer-roadmap-heading .brand-logo { width: 156px; }
-.employer-roadmap-heading > span:not(.brand-logo) { padding: 10px 24px; border-radius: 24px; background: #e3edff; color: var(--hr-blue); font-size: 13px; font-weight: 700; }
+.employer-roadmap-heading { display: flex; justify-content: flex-end; align-items: center; gap: 20px; margin-bottom: 28px; }
+.employer-roadmap-heading > span { padding: 10px 24px; border-radius: 24px; background: #e3edff; color: var(--hr-blue); font-size: 13px; font-weight: 700; }
 .employer-process .employer-section-heading { max-width: 1000px; margin-bottom: 36px; }
 .employer-roadmap { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 32px; list-style: none; margin: 0; padding: 0; }
 .employer-roadmap > li { position: relative; min-width: 0; }
@@ -53,8 +52,7 @@
 }
 @media (max-width:700px) {
  .employer-roadmap-heading { gap: 12px; margin-bottom: 24px; }
- .employer-roadmap-heading .brand-logo { width: 120px; }
- .employer-roadmap-heading > span:not(.brand-logo) { padding: 8px 12px; font-size: 11px; }
+ .employer-roadmap-heading > span { padding: 8px 12px; font-size: 11px; }
  .employer-process .employer-section-heading { margin-bottom: 28px; }
  .employer-roadmap > li { padding-left: 40px; }
  .employer-roadmap-node > span { width: 30px; height: 30px; font-size: 14px; }

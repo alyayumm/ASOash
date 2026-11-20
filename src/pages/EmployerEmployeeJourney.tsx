@@ -36,7 +36,7 @@ function RoadmapVisual({ kind }: { kind: typeof visualKinds[number] }) {
 export function EmployerEmployeeJourney({ enrollmentLink }: { enrollmentLink?: string | null }) {
   return <section className="employer-section employer-process" id="employer-process" tabIndex={-1} aria-labelledby="employer-process-title">
     <div className="content-shell">
-      <div className="employer-roadmap-heading"><BrandLogo /><span>Путь сотрудника</span></div>
+      <div className="employer-roadmap-heading"><span>Путь сотрудника</span></div>
       <div className="employer-section-heading">
         <h2 id="employer-process-title">Как сотрудники воспользуются программой</h2>
         <p>Сотрудник проходит три шага. Наш менеджер помогает с оформлением и началом обучения.</p>
