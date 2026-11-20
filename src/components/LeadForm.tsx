@@ -1,3 +1,4 @@
+import { LegalFormNotice } from './LegalLinks'
 import { useState } from 'react'
 import { ArrowRight, CheckCircle2 } from 'lucide-react'
 import { trackEvent } from '../analytics'
@@ -245,6 +246,7 @@ export function LeadForm() {
           </a>
         </span>
       </label>
+      <LegalFormNotice />
       {errors.consent ? (
         <small id="lead-consent-error" className="field-error field-error--standalone" role="alert">
           {errors.consent}

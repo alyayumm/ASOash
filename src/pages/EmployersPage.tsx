@@ -1,3 +1,4 @@
+import { LegalLinks } from '../components/LegalLinks'
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import { ArrowLeft, ArrowRight, Check, ChevronDown, Menu, X, Handshake, Phone, Mail } from 'lucide-react'
 import { BrandLogo } from '../components/BrandLogo'
@@ -147,6 +148,6 @@ export default function EmployersPage() {
         </address>
         <a className="corporate-back" href="./"><ArrowLeft size={18} aria-hidden="true" />На главную</a></div><div className="employer-contact-form"><EmployersLeadForm selection={selection} source={source} city={leadCity} requestTopic={requestTopic} onCityChange={setLeadCity} onTaxChange={tax => choose({ ...selection, tax })} /></div></section>
     </main>
-    <footer className="corporate-footer"><div className="content-shell"><a href="./" aria-label="АСО Автошкол — на главную"><BrandLogo inverse /></a><p>Корпоративная программа для работодателей</p><a href="./#personal-data-consent" target="_blank" rel="noreferrer">Обработка персональных данных</a></div></footer>
+    <footer className="corporate-footer"><div className="content-shell"><a href="./" aria-label="АСО Автошкол — на главную"><BrandLogo inverse /></a><p>Корпоративная программа для работодателей</p><LegalLinks /></div></footer>
   </div>
 }

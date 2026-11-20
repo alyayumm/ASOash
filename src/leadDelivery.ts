@@ -1,3 +1,4 @@
+import { CONSENT_VERSION } from './legalData'
 import type { TrackingFields } from './types'
 
 export type LeadKind = 'lead_form' | 'quiz'
@@ -39,12 +40,17 @@ export async function sendLead(payload: LeadPayload, { requireConfirmation = fal
   const controller = new AbortController()
   const timeout = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS)
 
+  const submittedAt = new Date().toISOString()
   const body = JSON.stringify({
     ...payload,
+    values: {
+      ...payload.values,
+      ...(payload.values.consent === true ? { consent_version: CONSENT_VERSION, consented_at: submittedAt } : {}),
+    },
     tracking: {
       ...payload.tracking,
       pageUrl: window.location.href,
-      submittedAt: new Date().toISOString(),
+      submittedAt,
     },
   })
 

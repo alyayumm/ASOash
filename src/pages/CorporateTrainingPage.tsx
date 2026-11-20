@@ -1,3 +1,4 @@
+import { LegalLinks } from '../components/LegalLinks'
 import { useEffect, useState } from 'react'
 import { ArrowLeft, ArrowRight, Check, ChevronDown } from 'lucide-react'
 import { BrandLogo } from '../components/BrandLogo'
@@ -102,7 +103,7 @@ export default function CorporateTrainingPage() {
 
         <section className="corporate-contact corporate-section content-shell" id="corporate-contact" tabIndex={-1} aria-labelledby="corporate-contact-title"><div className="corporate-contact__copy"><p className="corporate-label">Следующий шаг</p><h2 id="corporate-contact-title">Получите условия <span>для вашей компании</span></h2><p>Оставьте контакт — обсудим доступные программы, стоимость и порядок подключения.</p><a className="corporate-back" href="./#directions"><ArrowLeft size={18} aria-hidden="true" />К другим направлениям АСО</a></div><div className="corporate-contact__form"><h3>Обсудим вашу задачу</h3><CorporateLeadForm audience={audience} source={source} onAudienceChange={selectAudience} /></div></section>
       </main>
-      <footer className="corporate-footer"><div className="content-shell"><a href="./" aria-label="АСО Автошкол — на главную"><BrandLogo inverse /></a><p>Корпоративная программа обучения вождению</p><a href="./#personal-data-consent" target="_blank" rel="noreferrer">Обработка персональных данных</a></div></footer>
+      <footer className="corporate-footer"><div className="content-shell"><a href="./" aria-label="АСО Автошкол — на главную"><BrandLogo inverse /></a><p>Корпоративная программа обучения вождению</p><LegalLinks /></div></footer>
     </div>
   )
 }

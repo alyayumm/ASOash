@@ -1,3 +1,4 @@
+import { LegalFormNotice } from '../components/LegalLinks'
 import { useRef, useState, type FormEvent } from 'react'
 import { ArrowRight, CheckCircle2 } from 'lucide-react'
 import { trackEvent } from '../analytics'
@@ -59,7 +60,7 @@ export function EmployersLeadForm({ selection, source, city, requestTopic, onCit
           participants: fields.participants || 'Пока не определено', topic: requestTopic,
           company_id: attribution.company_id, campaign_id: attribution.campaign_id,
           comment: [requestTopic ? `Тема: ${requestTopic}` : '', `Компания: ${fields.company.trim()}`, `${channelLabels[method]}: ${contact}`, `Формат: ${content.label}`, selection.payment === 'company' ? `Режим покупателя: ${taxContent[selection.tax].label}` : '', fields.participants ? `Участников: ${fields.participants}` : '', fields.comment.trim()].filter(Boolean).join('\n'),
-          consent: fields.consent, consent_version: 'site-consent-2026-06-29', consented_at: new Date().toISOString(), service: 'employers',
+          consent: fields.consent, service: 'employers',
         }, tracking: { ...tracking, source },
       }, { requireConfirmation: true })
       setStatus('success')
@@ -93,7 +94,8 @@ export function EmployersLeadForm({ selection, source, city, requestTopic, onCit
         <label><span>Количество участников</span><input name="participants" type="number" min="1" step="1" placeholder="Пока не определено" value={fields.participants} {...invalid('participants')} onChange={(e) => update('participants', e.target.value)} />{error('participants')}</label>
         <label><span>Комментарий</span><textarea name="comment" rows={3} value={fields.comment} placeholder="Что важно учесть при подборе программы" onChange={(e) => update('comment', e.target.value)} /></label>
       </div></details>
-      <label className="corporate-consent"><input name="consent" type="checkbox" required checked={fields.consent} {...invalid('consent')} onChange={(e) => update('consent', e.target.checked)} /><span>Согласен на <a href="./#personal-data-consent" target="_blank" rel="noreferrer">обработку персональных данных</a></span></label>{error('consent')}
+      <label className="corporate-consent"><input name="consent" type="checkbox" required checked={fields.consent} {...invalid('consent')} onChange={(e) => update('consent', e.target.checked)} /><span>Согласен на <a href="./#personal-data-consent" target="_blank" rel="noreferrer">обработку персональных данных</a></span></label>
+      <LegalFormNotice />{error('consent')}
       {submitError ? <p className="corporate-submit-error" role="alert">{submitError}</p> : null}
       <button className="button button--primary button--wide" type="submit" disabled={status === 'loading'}>{status === 'loading' ? 'Отправляем…' : content.formCta}<ArrowRight aria-hidden="true" /></button>
     </fieldset>

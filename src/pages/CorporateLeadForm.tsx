@@ -1,3 +1,4 @@
+import { LegalFormNotice } from '../components/LegalLinks'
 import { useRef, useState, type FormEvent } from 'react'
 import { ArrowRight, CheckCircle2 } from 'lucide-react'
 import { trackEvent } from '../analytics'
@@ -111,7 +112,8 @@ export function CorporateLeadForm({ audience, source, onAudienceChange }: Props)
           <label><span>Город обучения</span><input name="city" value={fields.city} autoComplete="address-level2" onChange={(e) => update('city', e.target.value)} /></label>
           <label><span>Комментарий</span><textarea name="comment" value={fields.comment} rows={3} placeholder="Какая программа интересует и сколько сотрудников планируют учиться" onChange={(e) => update('comment', e.target.value)} /></label>
         </div></details>
-        <label className="corporate-consent"><input name="consent" type="checkbox" required checked={fields.consent} {...invalid('consent')} onChange={(e) => update('consent', e.target.checked)} /><span>Согласен на <a href="./#personal-data-consent" target="_blank" rel="noreferrer">обработку персональных данных</a></span></label>{error('consent')}
+        <label className="corporate-consent"><input name="consent" type="checkbox" required checked={fields.consent} {...invalid('consent')} onChange={(e) => update('consent', e.target.checked)} /><span>Согласен на <a href="./#personal-data-consent" target="_blank" rel="noreferrer">обработку персональных данных</a></span></label>
+      <LegalFormNotice />{error('consent')}
         {submitError ? <p className="corporate-submit-error" role="alert">{submitError}</p> : null}
         <button className="button button--primary button--wide" type="submit" disabled={status === 'loading'}>{status === 'loading' ? 'Отправляем…' : 'Получить условия'}<ArrowRight aria-hidden="true" /></button>
       </fieldset>

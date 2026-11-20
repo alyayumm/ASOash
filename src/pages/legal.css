@@ -1,0 +1,16 @@
+.legal-links { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+.corporate-footer .legal-links { max-width: 360px; flex-direction: column; align-items: flex-start; }
+.corporate-footer .legal-links a { font-size: 12px; color: #c9d6e9; }
+.legal-links a, .legal-form-note a, .legal-page .legal-section a { text-decoration: underline; text-underline-offset: 3px; }
+.legal-form-note, .corporate-form .legal-form-note, .employers-page .legal-form-note { margin: 0; font-size: 13px; line-height: 1.5; color: #536174; }
+.legal-page .legal-section a, .legal-page .legal-links a, .legal-back { color: #1749b4; }
+.legal-page .legal-links { font-size: 15px; line-height: 1.6; }
+.legal-page .system-page-hero { padding-block: 44px; }
+.legal-page .system-page-hero h1 { max-width: 980px; font-size: clamp(28px, 4vw, 48px); line-height: 1.12; overflow-wrap: anywhere; }
+.legal-page .legal-section { overflow-wrap: anywhere; }
+.legal-back { font-size: 14px; font-weight: 600; text-align: right; }
+@media (max-width:700px) {
+  .legal-page .system-page-header__shell { gap: 20px; }
+  .legal-page .header-logo-link { flex-shrink: 0; }
+  .legal-back { max-width: 170px; }
+}

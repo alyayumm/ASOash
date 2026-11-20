@@ -1,3 +1,4 @@
+import { LegalFormNotice } from './LegalLinks'
 import { useEffect, useId, useRef, useState } from 'react'
 import { ArrowLeft, ArrowRight, CheckCircle2, X } from 'lucide-react'
 import { trackEvent } from '../analytics'
@@ -251,6 +252,7 @@ export function QuizDialog({ open, onClose, initialStatus = '' }: QuizDialogProp
                       </a>
                     </span>
                   </label>
+      <LegalFormNotice />
                 </div>
               ) : current.key === 'result' ? (
                 <textarea
