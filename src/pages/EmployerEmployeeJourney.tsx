@@ -10,9 +10,8 @@ function RoadmapVisual({ kind }: { kind: typeof visualKinds[number] }) {
   return <div className="employer-roadmap-visual" aria-hidden="true">
     {kind === 'promo' ? <div className="employer-roadmap-phone">
       <BrandLogo />
-      <strong>Промокод</strong>
-      <span className="employer-roadmap-promo">ПРОМО</span>
-      <span className="employer-roadmap-input">Код от компании</span>
+      <strong>Введите промокод</strong>
+      <span className="employer-roadmap-input">KOMANDA26</span>
       <span className="employer-roadmap-action">Применить</span>
     </div> : null}
     {kind === 'payment' ? <div className="employer-roadmap-window">

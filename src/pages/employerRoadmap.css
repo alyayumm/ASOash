@@ -19,9 +19,8 @@
 .employer-roadmap-phone { position: relative; width: 176px; flex-shrink: 0; border: 8px solid #101722; border-radius: 28px; background: #fff; padding: 28px 12px 14px; display: flex; flex-direction: column; align-items: stretch; gap: 10px; }
 .employer-roadmap-phone::before { content: ''; position: absolute; top: 7px; left: 50%; transform: translateX(-50%); width: 48px; height: 6px; background: #101722; border-radius: 6px; }
 .employer-roadmap-phone .brand-logo { width: 120px; margin: 0 auto 4px; }
-.employer-roadmap-phone > strong { font-size: 16px; text-align: center; }
-.employer-roadmap-promo { position: absolute; top: 76px; right: -30px; padding: 12px; background: #e8f1ff; color: var(--hr-blue); border: 1px solid #b9d0fb; border-radius: 12px; font-size: 12px; font-weight: 600; }
-.employer-roadmap-input { padding: 9px 4px; border: 1px solid #d0def5; border-radius: 8px; background: #f2f6fd; color: #536174; font-size: 11px; text-align: center; }
+.employer-roadmap-phone > strong { font-size: 13px; text-align: center; }
+.employer-roadmap-input { padding: 9px 4px; border: 1px solid #d0def5; border-radius: 8px; background: #f2f6fd; color: var(--hr-blue); font-size: 14px; font-weight: 700; text-align: center; }
 .employer-roadmap-action { padding: 10px 6px; border-radius: 9px; background: var(--roadmap-blue); color: #fff; font-size: 13px; font-weight: 600; text-align: center; }
 .employer-roadmap-action--red { background: #e21b1b; }
 .employer-roadmap-window { width: 100%; max-width: 280px; border: 2px solid #cfdbef; border-radius: 18px; background: #fff; }
@@ -73,7 +72,6 @@
 @media (max-width:360px) {
  .employer-roadmap-phone { width: 160px; padding-inline: 10px; }
  .employer-roadmap-phone .brand-logo { width: 110px; }
- .employer-roadmap-promo { right: -28px; padding: 8px; font-size: 10px; }
  .employer-roadmap-window-heading { padding-inline: 10px; font-size: 11px; }
  .employer-roadmap-window-body { padding: 12px; }
  .employer-roadmap-document { padding: 12px 6px; gap: 8px; }
