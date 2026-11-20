@@ -1,51 +1,26 @@
-import { Check } from 'lucide-react'
-import programmeLaunch from '../assets/hr-programme-launch.webp'
+import { ArrowRight, Check, FileText, GraduationCap, Link, Megaphone, Ticket } from 'lucide-react'
+import launchImage from '../assets/hr-programme-launch.webp'
 
 type Props = { companyPaid: boolean; onRequest: () => void }
-
 export function EmployerLaunch({ companyPaid, onRequest }: Props) {
-  const steps = [
-    {
-      title: 'Оставьте заявку',
-      text: 'Укажите компанию, города и удобный контакт. Наш менеджер свяжется с вами.',
-    },
-    {
-      title: 'Согласуем условия',
-      text: 'Обсудим категории обучения, стоимость и формат участия: сотрудники оплачивают сами или платит компания.',
-    },
-    {
-      title: 'Подготовим запуск',
-      text: companyPaid
-        ? 'Согласуем участников, подготовим договор и выставим счёт.'
-        : 'Передадим готовый анонс, ссылку на программу и корпоративный промокод.',
-    },
-    {
-      title: 'Запустим программу',
-      text: companyPaid
-        ? 'После оплаты наш менеджер свяжется с сотрудниками и направит документы и инструкции по началу обучения.'
-        : 'Вы размещаете предложение для сотрудников. Мы помогаем участникам с оформлением, оплатой и началом обучения.',
-    },
+  const steps = companyPaid ? [
+    { title: 'Готовим предложение', text: 'Подберём программу, подготовим договор и счёт.' },
+    { title: 'Согласуете запуск', text: 'Подтвердите условия и участников, оплатите счёт.' },
+    { title: 'Организуем обучение', text: 'Свяжемся с участниками, поможем с оформлением и направим инструкции по началу обучения.' },
+  ] : [
+    { title: 'Готовим запуск', text: 'Подготовим анонс, ссылку, корпоративный промокод и инструкции для сотрудников.' },
+    { title: 'Размещаете предложение', text: 'Опубликуйте готовый анонс в корпоративном чате, рассылке или на внутреннем портале.' },
+    { title: 'Организуем обучение', text: 'Ответим сотрудникам, поможем с оформлением и записью, направим документы и инструкции.' },
   ]
-
-  return <section className="employer-launch employer-section" id="employer-launch" tabIndex={-1} aria-labelledby="employer-launch-title">
-    <div className="content-shell" id="employer-format-panel" role="tabpanel" aria-labelledby={`employer-payment-${companyPaid ? 1 : 0}`}>
-      <div className="employer-launch-intro">
-        <div className="employer-launch-copy">
-          <h2 id="employer-launch-title">Как запустить программу в вашей компании</h2>
-          <p>Согласуем условия, подготовим запуск и поможем сотрудникам начать обучение.</p>
-        </div>
-        <img src={programmeLaunch} width={1672} height={941} loading="lazy" alt="Представитель компании и наш менеджер обсуждают программу обучения" />
-      </div>
-      <ol className="employer-launch-roadmap">
-        {steps.map((step, index) => <li key={step.title}>
-          <div className="employer-launch-node" aria-hidden="true"><span>0{index + 1}</span></div>
-          <div className="employer-launch-card"><h3>{step.title}</h3><p>{step.text}</p></div>
-        </li>)}
-      </ol>
-      <div className="employer-launch-footer">
-        <p><Check size={24} aria-hidden="true" /><span>Наш менеджер будет вашим единым контактом по вопросам запуска и сопровождения программы.</span></p>
-        <button className="button button--primary" type="button" onClick={onRequest}>Получить условия для компании</button>
-      </div>
-    </div>
-  </section>
+  const icons = [FileText, Megaphone, GraduationCap]
+  return <section className="employer-section employer-launch" id="employer-launch" tabIndex={-1} aria-labelledby="employer-launch-title"><div className="content-shell">
+    <div className="employer-launch-intro"><div className="employer-section-heading"><p className="corporate-label">Мы — Вы — Мы</p><h2 id="employer-launch-title">Как запустить программу в вашей компании</h2><p>Подготовку и сопровождение берём на себя. Для запуска вы получаете готовые материалы и понятный порядок действий.</p></div><img src={launchImage} width={1672} height={941} loading="lazy" alt="Обсуждаем с представителем компании запуск обучения" /></div>
+    <ol className="employer-launch-roadmap">{steps.map((step, index) => {
+      const Icon = icons[index]
+      return <li key={index} className={index === 1 ? 'employer-launch-yours' : undefined}><div className="employer-launch-node"><span>0{index + 1}</span></div><div className="employer-launch-card"><div className="employer-launch-owner"><strong>{index === 1 ? 'Вы' : 'Мы'}</strong><span>{index === 1 ? 'Ваша задача' : 'Берём на себя'}</span><Icon size={24} aria-hidden="true" /></div><h3>{step.title}</h3><p>{step.text}</p></div></li>
+    })}</ol>
+    <p className="employer-launch-result"><Check size={22} aria-hidden="true" /><span>{companyPaid ? 'После согласования и оплаты организацию обучения и сопровождение участников берём на себя.' : 'Сотрудники общаются с нашим менеджером напрямую. Вам не нужно собирать заявки, пересылать документы и координировать запись.'}</span></p>
+    <div className="employer-launch-kit"><div><h3>Материалы для запуска уже подготовлены</h3><ul><li><FileText size={18} aria-hidden="true" />Готовый анонс</li><li><Link size={18} aria-hidden="true" />Ссылка на программу</li>{!companyPaid ? <li><Ticket size={18} aria-hidden="true" />Корпоративный промокод</li> : null}</ul></div><div className="employer-announcement"><span>Пример анонса для команды</span><strong>Обучение вождению для нашей команды</strong><p>Коллеги, для вас доступна корпоративная программа обучения. Подробности и порядок оформления — по ссылке в анонсе.</p></div></div>
+    <button className="corporate-text-button" type="button" onClick={onRequest}>Получить условия для компании<ArrowRight size={18} aria-hidden="true" /></button>
+  </div></section>
 }

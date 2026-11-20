@@ -5,14 +5,14 @@ import { isLeadWebhookConfigured, sendLead } from '../leadDelivery'
 import { createTrackingFields } from '../trackingFields'
 import { HiddenTrackingInputs } from '../components/HiddenTrackingInputs'
 import { paymentContent, taxContent } from './employersData'
-import { getEmployerAttribution, type EmployerSelection } from './employersState'
+import { getEmployerAttribution, type BuyerTaxRegime, type EmployerSelection } from './employersState'
 import { validateEmployerForm, type EmployerContact, type EmployerFields } from './employersForm'
 
 const initialFields: Omit<EmployerFields, 'city'> = { name: '', company: '', participants: '', comment: '', consent: false }
 const channelLabels = { email: 'Email', telegram: 'Telegram', whatsapp: 'WhatsApp' }
-type Props = { selection: EmployerSelection; source: string; city: string; onCityChange: (city: string) => void; onTaxEdit: () => void }
+type Props = { selection: EmployerSelection; source: string; city: string; requestTopic: string; onCityChange: (city: string) => void; onTaxChange: (tax: BuyerTaxRegime) => void }
 
-export function EmployersLeadForm({ selection, source, city, onCityChange, onTaxEdit }: Props) {
+export function EmployersLeadForm({ selection, source, city, requestTopic, onCityChange, onTaxChange }: Props) {
   const [fields, setFields] = useState(initialFields)
   const [method, setMethod] = useState<EmployerContact>('email')
   const [contacts, setContacts] = useState({ email: '', telegram: '', whatsapp: '' })
@@ -56,9 +56,9 @@ export function EmployersLeadForm({ selection, source, city, onCityChange, onTax
           email: method === 'email' ? contact : '', telegram: method === 'telegram' ? contact : '', phone: method === 'whatsapp' ? contact : '',
           status: content.label, payment_mode: selection.payment,
           ...(selection.payment === 'company' ? { buyer_tax_regime: selection.tax } : {}),
-          participants: fields.participants || 'Пока не определено',
+          participants: fields.participants || 'Пока не определено', topic: requestTopic,
           company_id: attribution.company_id, campaign_id: attribution.campaign_id,
-          comment: [`Компания: ${fields.company.trim()}`, `${channelLabels[method]}: ${contact}`, `Формат: ${content.label}`, selection.payment === 'company' ? `Режим покупателя: ${taxContent[selection.tax].label}` : '', fields.participants ? `Участников: ${fields.participants}` : '', fields.comment.trim()].filter(Boolean).join('\n'),
+          comment: [requestTopic ? `Тема: ${requestTopic}` : '', `Компания: ${fields.company.trim()}`, `${channelLabels[method]}: ${contact}`, `Формат: ${content.label}`, selection.payment === 'company' ? `Режим покупателя: ${taxContent[selection.tax].label}` : '', fields.participants ? `Участников: ${fields.participants}` : '', fields.comment.trim()].filter(Boolean).join('\n'),
           consent: fields.consent, consent_version: 'site-consent-2026-06-29', consented_at: new Date().toISOString(), service: 'employers',
         }, tracking: { ...tracking, source },
       }, { requireConfirmation: true })
@@ -76,6 +76,8 @@ export function EmployersLeadForm({ selection, source, city, onCityChange, onTax
   if (status === 'success') return <div className="corporate-success" role="status" aria-live="polite"><CheckCircle2 aria-hidden="true" /><h3>Заявка отправлена.</h3><p>Менеджер свяжется с вами по указанному контакту</p><button className="corporate-text-button" type="button" onClick={() => { setFields(initialFields); onCityChange(''); setContacts({ email: '', telegram: '', whatsapp: '' }); setStatus('idle'); started.current = false }}>Оставить ещё одно обращение</button></div>
   return <form className="corporate-form employer-form" ref={formRef} noValidate onSubmit={submit} aria-busy={status === 'loading'} onFocusCapture={() => { if (!started.current) { started.current = true; trackEvent('employer_form_start', { payment_mode: selection.payment, source }) } }}>
     <HiddenTrackingInputs fields={{ ...tracking, source }} />
+    {requestTopic ? <p className="employer-form-topic" role="status"><span>Тема обращения</span><strong>{requestTopic}</strong></p> : null}
+    <input type="hidden" name="topic" value={requestTopic} readOnly />
     {!configured ? <p className="corporate-form-notice" role="status">Сейчас отправка формы недоступна. Попробуйте позже.</p> : null}
     <fieldset className="corporate-form-fields" disabled={status === 'loading'}><legend className="corporate-visually-hidden">Заявка работодателя</legend>
       <div className="corporate-field-row">
@@ -84,10 +86,10 @@ export function EmployersLeadForm({ selection, source, city, onCityChange, onTax
       </div>
       <fieldset className="corporate-channels"><legend>Удобный способ связи</legend>{(Object.keys(channelLabels) as EmployerContact[]).map((channel) => <label key={channel}><input type="radio" name="channel" value={channel} checked={method === channel} onChange={() => { setMethod(channel); setErrors((current) => ({ ...current, contact: '' })); setSubmitError('') }} /><span>{channelLabels[channel]}</span></label>)}</fieldset>
       <label><span>{method === 'email' ? 'Рабочий email *' : method === 'telegram' ? 'Telegram: username или телефон *' : 'Телефон WhatsApp *'}</span><input name="contact" type={method === 'email' ? 'email' : method === 'telegram' ? 'text' : 'tel'} inputMode={method === 'email' ? 'email' : method === 'telegram' ? 'text' : 'tel'} required autoComplete={method === 'email' ? 'email' : method === 'whatsapp' ? 'tel' : 'off'} placeholder={method === 'email' ? 'hr@company.ru' : method === 'telegram' ? '@username или +7 900 000-00-00' : '+7 900 000-00-00'} value={contacts[method]} {...invalid('contact')} onChange={(e) => { setContacts((current) => ({ ...current, [method]: e.target.value })); setErrors((current) => ({ ...current, contact: '' })); setSubmitError('') }} />{error('contact')}</label>
-      <label><span>Город обучения *</span><input name="city" required autoComplete="address-level2" placeholder="Например, Москва или Санкт-Петербург" value={city} {...invalid('city')} onChange={(e) => { onCityChange(e.target.value); setErrors((current) => ({ ...current, city: '' })); setSubmitError('') }} />{error('city')}</label>
+      <label><span>Город обучения *</span><select name="city" required autoComplete="address-level2" value={city} {...invalid('city')} onChange={(e) => { onCityChange(e.target.value); setErrors((current) => ({ ...current, city: '' })); setSubmitError('') }}><option value="">Выберите город</option><option>Москва</option><option>Санкт-Петербург</option><option>Оба города</option></select>{error('city')}</label>
       <input type="hidden" name="payment" value={selection.payment} readOnly />
-      {selection.payment === 'company' ? <div className="employer-form-tax"><input type="hidden" name="tax" value={selection.tax} readOnly /><span>Документы для компании: <strong>{taxContent[selection.tax].label}</strong></span><button className="corporate-text-button" type="button" onClick={onTaxEdit}>Изменить</button></div> : null}
       <details className="corporate-extra" open={extraOpen} onToggle={(e) => setExtraOpen(e.currentTarget.open)}><summary>Уточнить задачу <span>необязательно</span></summary><div>
+        {selection.payment === 'company' ? <label><span>Налоговый режим компании</span><select name="tax" value={selection.tax} onChange={e => onTaxChange(e.target.value as BuyerTaxRegime)}>{(Object.keys(taxContent) as BuyerTaxRegime[]).map(tax => <option key={tax} value={tax}>{taxContent[tax].label}</option>)}</select></label> : null}
         <label><span>Количество участников</span><input name="participants" type="number" min="1" step="1" placeholder="Пока не определено" value={fields.participants} {...invalid('participants')} onChange={(e) => update('participants', e.target.value)} />{error('participants')}</label>
         <label><span>Комментарий</span><textarea name="comment" rows={3} value={fields.comment} placeholder="Что важно учесть при подборе программы" onChange={(e) => update('comment', e.target.value)} /></label>
       </div></details>
