@@ -32,7 +32,7 @@
 .employer-facts li { display: flex; gap: 10px; align-items: center; font-size: 14px; font-weight: 600; }
 .employer-facts svg { color: var(--hr-blue); flex-shrink: 0; }
 .employers-page .employer-formats { padding-block: 32px; }
-.employer-formats-heading { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-bottom: 16px; }
+.employer-formats-heading { display: flex; align-items: center; justify-content: flex-start; gap: 24px; margin-bottom: 16px; }
 .employers-page .employer-formats-heading h2 { font-size: 28px; text-wrap: pretty; }
 .employer-payment-tabs { display: flex; flex-shrink: 0; gap: 4px; padding: 4px; border-radius: 10px; background: #edf4ff; }
 .employer-payment-tabs > button { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 10px 16px; border: 0; background: transparent; border-radius: 7px; color: var(--hr-blue); font-size: 14px; font-weight: 600; cursor: pointer; }
