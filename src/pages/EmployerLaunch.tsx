@@ -1,10 +1,12 @@
 import { ArrowRight, Check, CheckCheck, ChevronDown, FileText, GraduationCap, Link, Megaphone, Ticket, Users } from 'lucide-react'
 import launchImage from '../assets/hr-programme-launch.webp'
 import employeeInstructions from '../assets/hr-employee-offer-instructions.png'
+import companyInstructions from '../assets/hr-company-offer-instructions.png'
 
 type Props = { companyPaid: boolean; onRequest: () => void }
 const examplePromoCode = 'KOMANDA26'
 export function EmployerLaunch({ companyPaid, onRequest }: Props) {
+  const instructions = companyPaid ? companyInstructions : employeeInstructions
   const steps = companyPaid ? [
     { title: 'Готовим предложение', text: 'Подберём программу, подготовим условия, предложение и инструкции для сотрудников, договор и счёт.' },
     { title: 'Согласуете и размещаете предложение', text: 'Согласуйте условия и разместите готовое предложение для сотрудников. Дальнейшее оформление и сопровождение берём на себя.' },
@@ -33,10 +35,10 @@ export function EmployerLaunch({ companyPaid, onRequest }: Props) {
           <span className="employer-chat-avatar" aria-hidden="true">HR</span>
           <article className="employer-announcement" aria-label={companyPaid ? 'Анонс: оплачивает компания' : 'Анонс: сотрудник оплачивает сам'}>
             <div className="employer-chat-sender">HR-команда</div>
-            {!companyPaid ? <a className="employer-instruction-preview" href={employeeInstructions} target="_blank" rel="noreferrer">
-              <img src={employeeInstructions} width={1254} height={1254} loading="lazy" alt="Инструкция для сотрудников: выбор программы, промокод KOMANDA26, самостоятельная оплата и получение документов" />
+            <a className="employer-instruction-preview" href={instructions} target="_blank" rel="noreferrer">
+              <img src={instructions} width={1254} height={1254} loading="lazy" alt={companyPaid ? 'Инструкция по обучению за счёт компании: выбор программы, промокод KOMANDA26, оформление и оплата компанией' : 'Инструкция для сотрудников: выбор программы, промокод KOMANDA26, самостоятельная оплата и получение документов'} />
               <span><strong>Инструкция для сотрудников</strong><span>Открыть изображение<ArrowRight size={16} aria-hidden="true" /></span></span>
-            </a> : null}
+            </a>
             <div className="employer-announcement-body">
         <strong>Обучение вождению для нашей команды</strong>
               <p>{companyPaid ? 'Коллеги, для нашей команды доступна программа обучения вождению за счёт компании.' : 'Коллеги, мы договорились о специальных условиях обучения в автошколе для сотрудников нашей компании.'}</p>
